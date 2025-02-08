@@ -3,9 +3,9 @@ import arobase from '../../../assets/images/arobase.svg';
 
 export default function Activity() {
   return (
-    <div className="flex h-full">
+    <div className="flex h-full bg-[#3E0F3F]">
       {/* Left Sidebar */}
-      <div className="w-[260px] bg-[#3F0E40] flex flex-col flex-shrink-0">
+      <div className="w-[260px] bg-[#512654] flex flex-col flex-shrink-0 rounded-lg">
         {/* Header */}
         <div className="px-4 py-2 flex items-center justify-between border-b border-white/10">
           <div className="flex items-center">

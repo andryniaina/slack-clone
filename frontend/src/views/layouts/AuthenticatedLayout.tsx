@@ -10,6 +10,7 @@ import {
     Settings,
     Bell,
     LogOut,
+    Slack
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import avatar from '../../assets/images/avatar.png';
@@ -31,17 +32,17 @@ export default function AuthenticatedLayout() {
     };
 
     const getButtonClass = (path: string) => {
-        const baseClass = "w-9 h-9 rounded flex items-center justify-center text-white transition-colors";
-        return `${baseClass} ${isActive(path) ? 'bg-[#1164A3] hover:bg-[#1164A3]' : 'bg-[#3F0E40] hover:bg-white/10'}`;
+        const baseClass = "w-9 h-9 rounded-lg flex items-center justify-center text-white transition-colors";
+        return `${baseClass} ${isActive(path) ? 'bg-[#754A77] hover:bg-[#754A77]' : 'bg-[#rgb(69,17,70)] hover:bg-white/10'}`;
     };
 
     return (
         <div className="h-screen flex">
             {/* Left Sidebar */}
-            <div className="w-[65px] bg-[#541554] flex flex-col items-center py-3">
+            <div className="w-[75px] bg-[#431343] flex flex-col items-center py-3 pt-12">
                 {/* KS Logo */}
-                <div className="w-9 h-9 bg-white/10 rounded flex items-center justify-center text-white font-semibold mb-4">
-                    KS
+                <div className="w-9 h-9 rounded flex items-center justify-center text-white mb-4">
+                    <Slack size={25} />
                 </div>
 
                 {/* Navigation Items */}
@@ -78,7 +79,7 @@ export default function AuthenticatedLayout() {
 
                     {/* More */}
                     <div className="w-full flex flex-col items-center">
-                        <button className="w-9 h-9 bg-[#3F0E40] rounded flex items-center justify-center text-white hover:bg-white/10">
+                        <button className="w-9 h-9 bg-[#rgb(69,17,70)] rounded-lg flex items-center justify-center text-white hover:bg-white/10">
                             <span className="text-lg">•••</span>
                         </button>
                         <span className="text-[11px] text-white/70 mt-0.5">Plus</span>
@@ -88,13 +89,13 @@ export default function AuthenticatedLayout() {
                 {/* Bottom Section */}
                 <div className="mt-4 w-full flex flex-col items-center space-y-3">
                     {/* Plus Button */}
-                    <button className="w-9 h-9 bg-white/10 rounded flex items-center justify-center text-white hover:bg-white/20">
+                    <button className="w-9 h-9 bg-[#542C56] rounded-full flex items-center justify-center text-white hover:bg-white/20">
                         <Plus size={20} />
                     </button>
                 </div>
                 {/* Avatar */}
-                <div className="w-full flex flex-col items-center mt-4">
-                    <div className="w-9 h-9 rounded overflow-hidden">
+                <div className="w-full flex flex-col items-center mt-4 mb-4">
+                    <div className="w-8 h-8 rounded overflow-hidden">
                         <img src={avatar} alt="User avatar" className="w-full h-full object-cover" />
                     </div>
                 </div>
@@ -104,7 +105,9 @@ export default function AuthenticatedLayout() {
             {/* Main Content */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <header className="h-11 bg-[#541554] flex items-center px-4 gap-4">
+                <header className="h-11 bg-[#431343] flex items-center justify-center px-4 gap-4 relative">
+                    <div className="flex items-center gap-3">
+                    
                     {/* Navigation Buttons */}
                     <div className="flex items-center gap-2">
                         <button className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white">
@@ -119,20 +122,19 @@ export default function AuthenticatedLayout() {
                     </div>
 
                     {/* Search Bar */}
-                    <div className="flex-1 max-w-[725px] relative">
+                    <div className="flex-1 w-[50vw] relative">
                         <input
                             type="text"
                             placeholder="Rechercher dans Koto SA"
-                            className="w-full h-7 bg-[#4A154B] text-white placeholder-white/60 text-sm px-8 rounded border border-white/30 focus:outline-none focus:border-white/60"
+                            className="w-full h-7 bg-[#5B315E] text-white placeholder-white text-sm px-8 rounded border border-white/30 focus:outline-none focus:border-white/60"
                         />
                         <Search size={14} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-white/60" />
                     </div>
 
+                    </div>
+
                     {/* Right Side Icons */}
-                    <div className="flex items-center gap-2">
-                        <button className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white">
-                            <Settings size={18} />
-                        </button>
+                    <div className="flex items-center gap-2 absolute right-4">
                         <button
                             onClick={handleLogout}
                             className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white"

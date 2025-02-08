@@ -221,9 +221,9 @@ import {
     };
   
     return (
-      <div className="flex h-full">
+      <div className="flex h-full bg-[#3E0F3F]">
         {/* Left Sidebar */}
-        <div className="w-[260px] bg-[#3F0E40] flex flex-col flex-shrink-0">
+        <div className="w-[260px] bg-[#512654] flex flex-col flex-shrink-0 rounded-lg">
           {/* Sections */}
           <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
             {/* Channels Section */}
