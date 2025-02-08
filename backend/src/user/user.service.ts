@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { User, UserDocument } from './schemas/user.schema';
 import { RegisterDto, UpdateProfileDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
@@ -11,7 +11,7 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async create(registerDto: RegisterDto): Promise<UserDocument> {
+  async create(registerDto: RegisterDto): Promise<User> {
     const { email, password, username } = registerDto;
     const hashedPassword = await bcrypt.hash(password, 10);
     
@@ -24,33 +24,85 @@ export class UserService {
     return user.save();
   }
 
-  async findByEmail(email: string): Promise<UserDocument | null> {
-    return this.userModel.findOne({ email }).select('+password');
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userModel.findOne({ email }).select('+password').exec();
   }
 
-  async findById(id: string): Promise<UserDocument> {
-    const user = await this.userModel.findById(id);
+  async findById(userId: Types.ObjectId): Promise<User> {
+    const user = await this.userModel.findById(userId);
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
     }
     return user;
   }
 
-  async updateProfile(userId: string, updateProfileDto: UpdateProfileDto): Promise<UserDocument> {
-    const user = await this.userModel.findByIdAndUpdate(
-      userId,
-      { $set: updateProfileDto },
-      { new: true },
-    );
-    
+  async updateProfile(userId: Types.ObjectId, updateProfileDto: UpdateProfileDto): Promise<User> {
+    const user = await this.userModel
+      .findByIdAndUpdate(userId, updateProfileDto, { new: true })
+      .exec();
+
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
     }
-    
+
     return user;
   }
 
   async setOnlineStatus(userId: string, isOnline: boolean): Promise<void> {
     await this.userModel.findByIdAndUpdate(userId, { isOnline });
+  }
+
+  /**
+   * Récupère tous les utilisateurs
+   * @returns Liste des utilisateurs avec leurs informations de base
+   */
+  async findAll(): Promise<User[]> {
+    return this.userModel.find().exec();
+  }
+
+  async addSocketId(userId: Types.ObjectId, socketId: string): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(
+      userId,
+      { $addToSet: { socketIds: socketId } },
+      { new: true },
+    );
+
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return user;
+  }
+
+  async removeSocketId(userId: Types.ObjectId, socketId: string): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(
+      userId,
+      { $pull: { socketIds: socketId } },
+      { new: true },
+    );
+
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return user;
+  }
+
+  async findBySocketId(socketId: string): Promise<User | null> {
+    return this.userModel.findOne({ socketIds: socketId });
+  }
+
+  async updateOnlineStatus(userId: Types.ObjectId, isOnline: boolean): Promise<User> {
+    const user = await this.userModel.findByIdAndUpdate(
+      userId,
+      { isOnline },
+      { new: true },
+    );
+
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+
+    return user;
   }
 } 

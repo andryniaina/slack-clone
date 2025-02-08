@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Channel, ChannelDocument, ChannelType, PopulatedChannel } from './schemas/channel.schema';
 import { User } from '../user/schemas/user.schema';
 import { CreateChannelDto, UpdateChannelDto, AddMembersDto, RemoveMembersDto, CreateDirectMessageDto, ChannelQueryDto } from './dto/channel.dto';
@@ -270,5 +270,12 @@ export class ChannelService {
     await this.channelModel.findByIdAndUpdate(channelId, {
       lastMessageAt: new Date(),
     });
+  }
+
+  async findUserChannels(userId: Types.ObjectId): Promise<Channel[]> {
+    return this.channelModel
+      .find({ members: userId })
+      .sort({ updatedAt: -1 })
+      .exec();
   }
 } 

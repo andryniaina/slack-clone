@@ -24,6 +24,9 @@ export class User {
 
   @Prop()
   bio?: string;
+
+  @Prop({ type: [String], default: [] })
+  socketIds: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User); 

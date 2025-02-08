@@ -24,6 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const token = AuthService.getToken();
         if (token) {
           const currentUser = await UserService.getCurrentUser();
+
+          console.log("currentUser", currentUser);
           setUser(currentUser);
         }
       } catch (error) {
