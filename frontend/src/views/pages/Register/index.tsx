@@ -1,16 +1,63 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { AuthService } from '../../../services/auth';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function Register() {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    if (!email) {
+      setError('L\'adresse e-mail est requise');
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('L\'adresse e-mail n\'est pas valide');
+      return false;
+    }
+    if (!password) {
+      setError('Le mot de passe est requis');
+      return false;
+    }
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    if (!validateForm()) return;
+
+    try {
+      setLoading(true);
+      const response = await AuthService.register({ email, password });
+      await login(response.token);
+    } catch (err: any) {
+      if (err.response?.data?.message === 'Email already exists') {
+        setError('Cette adresse e-mail est déjà utilisée');
+      } else {
+        setError('Une erreur est survenue lors de l\'inscription');
+      }
+      console.error('Register error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,6 +80,12 @@ export default function Register() {
 
         {/* Form */}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {error && (
+            <div className="rounded-md bg-red-50 p-4">
+              <div className="text-sm text-red-700">{error}</div>
+            </div>
+          )}
+
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label htmlFor="email" className="sr-only">
@@ -48,7 +101,8 @@ export default function Register() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white"
+                  disabled={loading}
+                  className="appearance-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="nom@email-travail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +123,8 @@ export default function Register() {
                   type={showPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white"
+                  disabled={loading}
+                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Mot de passe (minimum 6 caractères)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -79,6 +134,7 @@ export default function Register() {
                   type="button"
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={loading}
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-500 hover:text-gray-700" aria-hidden="true" />
@@ -102,7 +158,8 @@ export default function Register() {
                   type={showConfirmPassword ? "text" : "password"}
                   autoComplete="new-password"
                   required
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white"
+                  disabled={loading}
+                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Confirmer le mot de passe"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -112,6 +169,7 @@ export default function Register() {
                   type="button"
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={loading}
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-500 hover:text-gray-700" aria-hidden="true" />
@@ -126,9 +184,10 @@ export default function Register() {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#611f69] hover:bg-[#4a1751] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#611f69]"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#611f69] hover:bg-[#4a1751] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#611f69] disabled:bg-[#611f69]/50 disabled:cursor-not-allowed"
             >
-              Créer un compte
+              {loading ? 'Inscription en cours...' : 'Créer un compte'}
             </button>
           </div>
 

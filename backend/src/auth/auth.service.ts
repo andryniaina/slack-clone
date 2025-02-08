@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { LoginDto, RegisterDto } from '../user/dto/auth.dto';
@@ -12,9 +12,16 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const user = await this.userService.create(registerDto);
-    const token = this.generateToken(user._id.toString());
-    return { token };
+    try {
+      const user = await this.userService.create(registerDto);
+      const token = this.generateToken(user._id.toString());
+      return { token };
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('Cette adresse e-mail est déjà utilisée');
+      }
+      throw error;
+    }
   }
 
   async login(loginDto: LoginDto) {
@@ -22,12 +29,12 @@ export class AuthService {
     const user = await this.userService.findByEmail(email);
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email ou mot de passe incorrect');
     }
 
     await this.userService.setOnlineStatus(user._id.toString(), true);

@@ -1,7 +1,8 @@
-import { Controller, Post, Body, UseGuards, Request, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request, HttpCode, HttpStatus, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto, RegisterDto } from '../user/dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { User } from '../user/schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,12 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async logout(@Request() req) {
     await this.authService.logout(req.user._id);
-    return { message: 'Logged out successfully' };
+    return { message: 'Déconnexion réussie' };
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  async getCurrentUser(@Request() req): Promise<User> {
+    return req.user;
   }
 } 

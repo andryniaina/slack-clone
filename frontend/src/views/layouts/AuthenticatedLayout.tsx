@@ -10,9 +10,21 @@ import {
   ArrowRight,
   HelpCircle,
   User,
+  LogOut,
 } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function AuthenticatedLayout() {
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <div className="h-screen flex">
       {/* Left Navigation */}
@@ -101,7 +113,7 @@ export default function AuthenticatedLayout() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-white">
         {/* Header */}
-        <header className="h-12 border-b border-[#00000014] flex items-center px-4 bg-white">
+        <header className="h-12 border-b border-[#00000014] flex items-center justify-between px-4 bg-white">
           <div className="flex items-center space-x-3">
             <button className="w-6 h-6 flex items-center justify-center text-[#616061] hover:text-[#1d1c1d]">
               <ArrowLeft size={18} />
@@ -124,6 +136,13 @@ export default function AuthenticatedLayout() {
           <div className="flex items-center space-x-3">
             <button className="w-6 h-6 flex items-center justify-center text-[#616061] hover:text-[#1d1c1d]">
               <User size={18} />
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="flex items-center justify-center px-3 py-1 rounded text-[#616061] hover:text-[#1d1c1d] hover:bg-[#f8f8f8] transition-colors duration-150"
+            >
+              <LogOut size={18} className="mr-1" />
+              <span className="text-sm">Déconnexion</span>
             </button>
           </div>
         </header>
