@@ -54,4 +54,17 @@ export class MessageController {
   ) {
     return this.messageService.markAsRead(channelId, id, req.user);
   }
+
+  @Get('channel/:channelId')
+  getChannelMessages(
+    @Param('channelId') channelId: string,
+    @Request() req,
+    @Query('limit') limit?: number,
+    @Query('before') before?: string,
+  ) {
+    return this.messageService.getChannelMessages(channelId, {
+      limit: limit ? parseInt(limit.toString()) : undefined,
+      before,
+    }, req.user);
+  }
 } 

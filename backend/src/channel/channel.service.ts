@@ -20,13 +20,16 @@ export class ChannelService {
       throw new ConflictException('Un canal avec ce nom existe déjà');
     }
 
+    // Convertir tous les IDs en ObjectId
+    const memberIds = [...new Set([user._id.toString(), ...members])].map(id => new Types.ObjectId(id));
+
     // Créer le canal
     const channel = new this.channelModel({
       name,
       type,
       description,
       createdBy: user._id,
-      members: [...new Set([user._id.toString(), ...members])], // Assurer l'unicité des membres
+      members: memberIds,
       admins: [user._id],
     });
 
@@ -48,15 +51,52 @@ export class ChannelService {
   async createDirectMessage(createDirectMessageDto: CreateDirectMessageDto, user: User): Promise<PopulatedChannel> {
     const { participantId } = createDirectMessageDto;
 
-    // Vérifier si un canal de messages directs existe déjà entre ces utilisateurs
-    const existingDM = await this.channelModel
-      .findOne({
+    // Convertir les IDs en ObjectId
+    const userId = new Types.ObjectId(user._id);
+    const participantObjectId = new Types.ObjectId(participantId);
+
+    console.log('userId', userId);
+    console.log('participantObjectId', participantObjectId);
+
+    // Vérifier si c'est un self-chat
+    const isSelfChat = userId.toString() === participantObjectId.toString();
+    console.log('isSelfChat', isSelfChat);
+
+    // Construire la requête en fonction du type de chat
+    let query;
+    if (isSelfChat) {
+      // Pour un self-chat, on cherche un canal où:
+      // 1. Les deux participants sont le même utilisateur
+      // 2. Il y a exactement 2 participants (pour gérer le cas où il pourrait y avoir plus de doublons)
+      query = {
         type: ChannelType.DIRECT,
-        participants: { $all: [user._id, participantId] },
-      })
+        $and: [
+          { participants: { $size: 2 } },
+          { participants: { $all: [userId] } },
+          { participants: { $not: { $elemMatch: { $ne: userId } } } }
+        ]
+      };
+    } else {
+      // Pour un chat normal entre deux utilisateurs différents
+      query = {
+        type: ChannelType.DIRECT,
+        participants: { 
+          $size: 2,
+          $all: [userId, participantObjectId]
+        }
+      };
+    }
+
+    console.log('Query:', JSON.stringify(query, null, 2));
+
+    // Vérifier si un canal de messages directs existe déjà
+    const existingDM = await this.channelModel
+      .findOne(query)
       .populate('members', 'email username avatar isOnline')
       .populate('createdBy', 'email username')
       .exec();
+
+    console.log('existingDM', existingDM);
 
     if (existingDM) {
       return existingDM as unknown as PopulatedChannel;
@@ -64,11 +104,17 @@ export class ChannelService {
 
     // Créer un nouveau canal de messages directs
     const channel = new this.channelModel({
-      name: `dm-${user._id}-${participantId}`,
+      name: isSelfChat 
+        ? `self-chat-${userId}` 
+        : `dm-${userId}-${participantObjectId}`,
       type: ChannelType.DIRECT,
-      createdBy: user._id,
-      members: [user._id, participantId],
-      participants: [user._id, participantId],
+      createdBy: userId,
+      members: isSelfChat 
+        ? [userId] // Pour self-chat: un seul membre
+        : [userId, participantObjectId],
+      participants: isSelfChat 
+        ? [userId, userId] // Pour self-chat: même ID deux fois
+        : [userId, participantObjectId],
     });
 
     await channel.save();

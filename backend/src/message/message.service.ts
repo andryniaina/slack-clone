@@ -232,4 +232,39 @@ export class MessageService {
       },
     );
   }
+
+  /**
+   * Récupère tous les messages d'un canal spécifique
+   * @param channelId ID du canal
+   * @param options Options de pagination
+   * @param user Utilisateur actuel
+   */
+  async getChannelMessages(
+    channelId: string,
+    options: { limit?: number; before?: string },
+    user: User
+  ): Promise<PopulatedMessage[]> {
+    // Vérifier l'accès au canal
+    await this.channelService.findOne(channelId, user);
+
+    // Construire la requête
+    const query: any = { channel: new Types.ObjectId(channelId) };
+    
+    // Ajouter la condition de pagination si 'before' est fourni
+    if (options.before) {
+      query._id = { $lt: new Types.ObjectId(options.before) };
+    }
+
+    // Effectuer la requête
+    const messages = await this.messageModel
+      .find(query)
+      .sort({ _id: -1 }) // Tri par ordre chronologique inverse (plus récent d'abord)
+      .limit(options.limit || 50) // Limite par défaut de 50 messages
+      .populate('sender', 'email username avatar isOnline')
+      .populate('mentions', 'email username avatar')
+      .populate('readBy', 'email username')
+      .exec();
+
+    return messages as unknown as PopulatedMessage[];
+  }
 } 
