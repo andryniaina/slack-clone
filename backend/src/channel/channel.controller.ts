@@ -23,6 +23,15 @@ export class ChannelController {
     return this.channelService.findAll(req.user, query);
   }
 
+  /**
+   * Récupère tous les canaux accessibles pour l'utilisateur connecté
+   * (canaux publics ou canaux privés dont l'utilisateur est membre)
+   */
+  @Get('accessible')
+  findAccessibleChannels(@Request() req) {
+    return this.channelService.findAccessibleChannels(req.user);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string, @Request() req) {
     return this.channelService.findOne(id, req.user);

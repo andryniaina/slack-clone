@@ -318,4 +318,29 @@ export class ChannelService {
       .sort({ updatedAt: -1 })
       .exec();
   }
+
+  /**
+   * Récupère tous les canaux accessibles pour l'utilisateur
+   * (canaux publics ou canaux privés dont l'utilisateur est membre)
+   */
+  async findAccessibleChannels(user: User): Promise<PopulatedChannel[]> {
+    const channels = await this.channelModel
+      .find({
+        $or: [
+          { type: ChannelType.PUBLIC },
+          { 
+            type: ChannelType.PRIVATE,
+            members: user._id 
+          }
+        ],
+        // Exclure les canaux de type DIRECT
+        type: { $ne: ChannelType.DIRECT }
+      })
+      .populate('members', 'email username avatar isOnline')
+      .populate('createdBy', 'email username')
+      .sort({ lastMessageAt: -1 })
+      .exec();
+
+    return channels as unknown as PopulatedChannel[];
+  }
 } 

@@ -1,6 +1,5 @@
 import { Message as MessageType } from '../../data/dtos/message';
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import avatar from '../../assets/images/avatar.png';
 import clsx from 'clsx';
 
@@ -10,8 +9,8 @@ interface MessageProps {
 }
 
 export function Message({ message, isFirstInGroup = true }: MessageProps) {
-  const formattedTime = format(new Date(message.createdAt), 'HH:mm', { locale: fr });
-  const formattedDate = format(new Date(message.createdAt), 'dd MMMM yyyy', { locale: fr });
+  const formattedTime = format(new Date(message.createdAt), 'HH:mm');
+  const formattedDate = format(new Date(message.createdAt), 'dd MMMM yyyy');
 
   return (
     <div className={clsx(
