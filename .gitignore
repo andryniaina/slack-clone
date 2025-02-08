@@ -1,0 +1,54 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node modules
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor & IDE files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Tests
+coverage/
+.nyc_output/
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Temporary directories
+.temp/
+.tmp/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
