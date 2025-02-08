@@ -55,12 +55,8 @@ export class ChannelService {
     const userId = new Types.ObjectId(user._id);
     const participantObjectId = new Types.ObjectId(participantId);
 
-    console.log('userId', userId);
-    console.log('participantObjectId', participantObjectId);
-
     // Vérifier si c'est un self-chat
     const isSelfChat = userId.toString() === participantObjectId.toString();
-    console.log('isSelfChat', isSelfChat);
 
     // Construire la requête en fonction du type de chat
     let query;
@@ -95,8 +91,6 @@ export class ChannelService {
       .populate('members', 'email username avatar isOnline')
       .populate('createdBy', 'email username')
       .exec();
-
-    console.log('existingDM', existingDM);
 
     if (existingDM) {
       return existingDM as unknown as PopulatedChannel;

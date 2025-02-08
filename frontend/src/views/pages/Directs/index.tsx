@@ -27,7 +27,7 @@ import { ChannelService } from '../../../services/channel';
 import { Channel } from '../../../data/dtos/channel';
 import { ChannelType } from '../../../data/dtos/channel';
 import { Message } from '../../../components/Message';
-import { useChannelMessages } from '../../../hooks/message';
+import { useChannelMessages, useSendMessage, useTypingStatus } from '../../../hooks/message';
 import { Message as MessageType } from '../../../data/dtos/message';
 
 export default function Directs() {
@@ -38,17 +38,10 @@ export default function Directs() {
   const [channels, setChannels] = useState<Channel[]>([]);
   const [isChannelsLoading, setIsChannelsLoading] = useState(true);
   const [message, setMessage] = useState('');
-  const [isFormatting, setIsFormatting] = useState({
-    bold: false,
-    italic: false,
-    strike: false,
-    link: false,
-    bulletList: false,
-    numberList: false,
-    code: false,
-    quote: false,
-  });
-  const inputRef = useRef<HTMLDivElement>(null);
+  const sendMessageMutation = useSendMessage();
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const { setTyping } = useTypingStatus(selectedChannel?._id || '');
 
   useEffect(() => {
     const initializeChannels = async () => {
@@ -189,34 +182,28 @@ export default function Directs() {
     );
   };
 
-  const handleFormat = (type: keyof typeof isFormatting) => {
-    setIsFormatting(prev => ({ ...prev, [type]: !prev[type] }));
-    inputRef.current?.focus();
-  };
-
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim() || !selectedChannel) return;
     
-    // TODO: Implement message sending with selectedChannel._id
-    console.log('Sending message:', message, 'to channel:', selectedChannel._id);
-    setMessage('');
-    setIsFormatting({
-      bold: false,
-      italic: false,
-      strike: false,
-      link: false,
-      bulletList: false,
-      numberList: false,
-      code: false,
-      quote: false,
-    });
+    try {
+      await sendMessageMutation.mutateAsync({
+        channelId: selectedChannel._id,
+        content: message.trim(),
+      });
+      
+      setMessage('');
+      
+      // Réinitialiser l'indicateur de frappe
+      if (isTyping) {
+        setIsTyping(false);
+        setTyping(false);
+        if (typingTimeoutRef.current) {
+          clearTimeout(typingTimeoutRef.current);
+        }
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message:', error);
+    }
   };
 
   return (
@@ -327,103 +314,38 @@ export default function Directs() {
             {/* Message Input */}
             <div className="p-4 border-t border-gray-200 bg-white">
               <div className="border border-gray-300 rounded-lg">
-                {/* Formatting Toolbar */}
-                <div className="px-3 py-2 border-b border-gray-200 flex items-center space-x-1">
-                  <button 
-                    onClick={() => handleFormat('bold')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.bold && "bg-gray-100"
-                    )}
-                  >
-                    <Bold className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('italic')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.italic && "bg-gray-100"
-                    )}
-                  >
-                    <Italic className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('strike')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.strike && "bg-gray-100"
-                    )}
-                  >
-                    <Strikethrough className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('link')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.link && "bg-gray-100"
-                    )}
-                  >
-                    <LinkIcon className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('bulletList')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.bulletList && "bg-gray-100"
-                    )}
-                  >
-                    <List className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('numberList')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.numberList && "bg-gray-100"
-                    )}
-                  >
-                    <ListOrdered className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('code')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.code && "bg-gray-100"
-                    )}
-                  >
-                    <Code className="w-4 h-4 text-gray-600" />
-                  </button>
-                  <button 
-                    onClick={() => handleFormat('quote')}
-                    className={clsx(
-                      "w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100",
-                      isFormatting.quote && "bg-gray-100"
-                    )}
-                  >
-                    <Quote className="w-4 h-4 text-gray-600" />
-                  </button>
-                </div>
-
                 {/* Message Input Area */}
-                <div 
-                  ref={inputRef}
-                  contentEditable
-                  role="textbox"
-                  className={clsx(
-                    "px-3 py-2 min-h-[80px] focus:outline-none",
-                    "text-gray-900 text-sm",
-                    !message && "before:content-[attr(data-placeholder)] before:text-gray-400"
-                  )}
-                  data-placeholder={selectedUser._id === currentUser?._id ? 
-                    "Notez quelque chose" : 
-                    `Envoyer un message à ${selectedUser.username || selectedUser.email}`
-                  }
-                  onInput={(e) => setMessage(e.currentTarget.textContent || '')}
-                  onKeyDown={handleKeyDown}
-                  style={{
-                    fontWeight: isFormatting.bold ? 'bold' : 'normal',
-                    fontStyle: isFormatting.italic ? 'italic' : 'normal',
-                    textDecoration: isFormatting.strike ? 'line-through' : 'none',
+                <textarea 
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    // Gérer l'indicateur de frappe
+                    if (!isTyping && selectedChannel) {
+                      setIsTyping(true);
+                      setTyping(true);
+                      
+                      // Réinitialiser après 3 secondes d'inactivité
+                      if (typingTimeoutRef.current) {
+                        clearTimeout(typingTimeoutRef.current);
+                      }
+                      
+                      typingTimeoutRef.current = setTimeout(() => {
+                        setIsTyping(false);
+                        setTyping(false);
+                      }, 3000);
+                    }
                   }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }
+                  }}
+                  placeholder={selectedUser?._id === currentUser?._id ? 
+                    "Notez quelque chose" : 
+                    `Envoyer un message à ${selectedUser?.username || selectedUser?.email}`
+                  }
+                  className="w-full px-3 py-2 min-h-[80px] resize-none focus:outline-none text-gray-900 text-sm placeholder:text-gray-400"
                 />
 
                 {/* Bottom Toolbar */}
@@ -431,9 +353,6 @@ export default function Directs() {
                   <div className="flex items-center space-x-2">
                     <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
                       <Plus className="w-4 h-4 text-gray-600" />
-                    </button>
-                    <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
-                      <Type className="w-4 h-4 text-gray-600" />
                     </button>
                     <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-gray-100">
                       <AtSign className="w-4 h-4 text-gray-600" />
@@ -479,6 +398,15 @@ function MessageList({ channelId }: { channelId: string }) {
     isLoading,
     error
   } = useChannelMessages(channelId);
+  const { typingUsers } = useTypingStatus(channelId);
+  const { user: currentUser } = useAuth();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Faire défiler vers le bas lors de nouveaux messages
+  useEffect(() => {
+    console.log('messages', messages);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   if (isLoading) {
     return (
@@ -520,6 +448,18 @@ function MessageList({ channelId }: { channelId: string }) {
           />
         );
       })}
+      <div ref={messagesEndRef} />
+      
+      {/* Indicateur de frappe */}
+      {typingUsers && typingUsers.length > 0 && (
+        <div className="px-6 py-2 text-sm text-gray-500">
+          {typingUsers
+            .filter(userId => userId !== currentUser?._id)
+            .length === 1
+            ? "Un utilisateur est en train d'écrire..."
+            : "Plusieurs utilisateurs sont en train d'écrire..."}
+        </div>
+      )}
     </div>
   );
 } 

@@ -247,8 +247,10 @@ export class MessageService {
     // Vérifier l'accès au canal
     await this.channelService.findOne(channelId, user);
 
+
+    console.log('channelId', channelId);
     // Construire la requête
-    const query: any = { channel: new Types.ObjectId(channelId) };
+    const query: any = { channel: channelId };
     
     // Ajouter la condition de pagination si 'before' est fourni
     if (options.before) {

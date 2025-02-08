@@ -7,6 +7,7 @@ import Activity from '../views/pages/Activity';
 import AuthenticatedLayout from '../views/layouts/AuthenticatedLayout';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AuthService } from '../services/auth';
+import { WebSocketProvider } from '../contexts/WebSocketContext';
 
 function ProtectedRoute() {
   const isAuthenticated = AuthService.isAuthenticated();
@@ -31,7 +32,9 @@ function PublicRoute() {
 function Root() {
   return (
     <AuthProvider>
-      <Outlet />
+      <WebSocketProvider>
+        <Outlet />
+      </WebSocketProvider>
     </AuthProvider>
   );
 }

@@ -2,11 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, 
 import { MessageService } from './message.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateMessageDto, UpdateMessageDto, GetMessagesQueryDto, AddReactionDto } from './dto/message.dto';
+import { MessageGateway } from './gateways/message.gateway';
 
 @Controller('messages')
 @UseGuards(JwtAuthGuard)
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly messageGateway: MessageGateway,
+  ) {}
 
   @Post()
   create(@Body() createMessageDto: CreateMessageDto, @Request() req) {
@@ -66,5 +70,26 @@ export class MessageController {
       limit: limit ? parseInt(limit.toString()) : undefined,
       before,
     }, req.user);
+  }
+
+  @Post('send')
+  async sendMessage(
+    @Body() createMessageDto: CreateMessageDto,
+    @Request() req,
+  ) {
+    // Créer le message
+    const message = await this.messageService.create(createMessageDto, req.user);
+
+    // Émettre le message via WebSocket
+    this.messageGateway.server.to(createMessageDto.channelId).emit('newMessage', message);
+
+    // Récupérer la liste mise à jour des messages
+    const messages = await this.messageService.getChannelMessages(
+      createMessageDto.channelId,
+      {},
+      req.user
+    );
+
+    return messages;
   }
 } 

@@ -8,14 +8,10 @@ import {
   MessageBody,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UseGuards } from '@nestjs/common';
-import { WsJwtGuard } from '../../auth/guards/ws-jwt.guard';
 import { MessageService } from '../message.service';
 import { UserService } from '../../user/user.service';
 import { ChannelService } from '../../channel/channel.service';
 import { Types } from 'mongoose';
-import { WsUser } from '../../auth/decorators/ws-user.decorator';
-import { User } from '../../user/schemas/user.schema';
 
 interface SendMessageDto {
   content: string;
@@ -25,11 +21,10 @@ interface SendMessageDto {
 
 @WebSocketGateway({
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
     credentials: true,
   },
 })
-@UseGuards(WsJwtGuard)
 export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
@@ -40,19 +35,12 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     private readonly channelService: ChannelService,
   ) {}
 
-  async handleConnection(@ConnectedSocket() client: Socket, @WsUser() user: User) {
-    // Ajouter le socketId à l'utilisateur
-    await this.userService.addSocketId(user._id, client.id);
-    await this.userService.updateOnlineStatus(user._id, true);
-
-    // Rejoindre tous les canaux de l'utilisateur
-    const channels = await this.channelService.findUserChannels(user._id);
-    channels.forEach((channel) => {
-      client.join(channel._id.toString());
-    });
+  async handleConnection(@ConnectedSocket() client: Socket) {
+    console.log('Client connected:', client.id);
   }
 
   async handleDisconnect(@ConnectedSocket() client: Socket) {
+    console.log('Client disconnected:', client.id);
     // Retirer le socketId de l'utilisateur
     const user = await this.userService.findBySocketId(client.id);
     if (user) {
@@ -66,13 +54,52 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     }
   }
 
+  @SubscribeMessage('connect_user')
+  async handleUserConnection(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: string
+  ) {
+    try {
+      const user = await this.userService.findById(new Types.ObjectId(userId));
+      if (!user) {
+        client.emit('error', { message: 'Utilisateur non trouvé' });
+        client.disconnect();
+        return;
+      }
+
+      // Ajouter le socketId à l'utilisateur
+      await this.userService.addSocketId(user._id, client.id);
+      await this.userService.updateOnlineStatus(user._id, true);
+
+      // Rejoindre tous les canaux de l'utilisateur
+      const channels = await this.channelService.findUserChannels(user._id);
+      channels.forEach((channel) => {
+        client.join(channel._id.toString());
+      });
+
+      client.data.user = user;
+      client.emit('connect_confirmed');
+      
+      console.log('User connected:', user.email);
+    } catch (error) {
+      console.error('Connection error:', error);
+      client.emit('error', { message: 'Erreur de connexion' });
+      client.disconnect();
+    }
+  }
+
   @SubscribeMessage('sendMessage')
   async handleMessage(
     @ConnectedSocket() client: Socket,
-    @WsUser() user: User,
     @MessageBody() data: SendMessageDto,
   ) {
     try {
+      const user = client.data.user;
+      if (!user) {
+        client.emit('error', { message: 'Utilisateur non authentifié' });
+        return;
+      }
+
       // Vérifier si l'utilisateur est membre du canal
       const channel = await this.channelService.findOne(data.channelId, user);
       if (!channel) {
@@ -111,9 +138,11 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
   @SubscribeMessage('typing')
   async handleTyping(
     @ConnectedSocket() client: Socket,
-    @WsUser() user: User,
     @MessageBody() data: { channelId: string; isTyping: boolean },
   ) {
+    const user = client.data.user;
+    if (!user) return;
+
     const { channelId, isTyping } = data;
     
     // Émettre l'état de frappe aux autres membres du canal
