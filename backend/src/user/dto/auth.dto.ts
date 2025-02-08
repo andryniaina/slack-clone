@@ -9,6 +9,10 @@ export class RegisterDto {
   @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  username: string;
 }
 
 export class LoginDto {

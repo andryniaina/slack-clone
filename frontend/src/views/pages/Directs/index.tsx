@@ -1,5 +1,5 @@
 import { 
-  Hash, 
+  Search, 
   ChevronDown, 
   Plus, 
   Send,
@@ -20,100 +20,64 @@ import {
 } from 'lucide-react';
 import avatar from '../../../assets/images/avatar.png';
 
-
-export default function Dashboard() {
+export default function DirectMessages() {
   return (
     <div className="flex h-full">
       {/* Left Sidebar */}
       <div className="w-[260px] bg-[#3F0E40] flex flex-col flex-shrink-0">
-        {/* Trial Banner */}
-        <div className="px-4 py-2 bg-[#4A154B] cursor-pointer hover:bg-opacity-90">
-          <div className="flex items-center text-white text-sm">
-            <div className="w-5 h-5 bg-white/10 rounded flex items-center justify-center mr-2">
-              ⏱️
-            </div>
-            <span>29 jours restants dans le cadre de l'essai</span>
-            <ChevronDown size={16} className="ml-auto" />
+        {/* Header */}
+        <div className="px-4 py-2 flex items-center justify-between">
+          <div className="flex items-center">
+            <h1 className="text-white font-semibold">Messages directs</h1>
+            <ChevronDown className="text-white/70 ml-1 w-4 h-4" />
+          </div>
+          <div className="flex items-center gap-1">
+            <button className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white rounded hover:bg-white/10">
+              <Plus className="w-4 h-4" />
+            </button>
           </div>
         </div>
 
-        {/* Sections */}
-        <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
-          {/* Appels d'équipe */}
-          <div>
-            <button className="w-full text-white/70 hover:text-white px-2 py-1 text-sm flex items-center">
-              <div className="w-5 h-5 mr-2 flex items-center justify-center">
-                🎧
-              </div>
-              Appels d'équipe
-            </button>
+        {/* Search Bar */}
+        <div className="px-3 py-2">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Trouver un message direct"
+              className="w-full h-7 bg-[#4A154B] text-white placeholder-white/60 text-sm px-7 rounded border border-white/30 focus:outline-none focus:border-white/60"
+            />
+            <Search className="w-4 h-4 absolute left-2 top-1/2 transform -translate-y-1/2 text-white/60" />
           </div>
+        </div>
 
-          {/* Brouillons */}
-          <div>
-            <button className="w-full text-white/70 hover:text-white px-2 py-1 text-sm flex items-center justify-between group">
-              <div className="flex items-center">
-                <div className="w-5 h-5 mr-2 flex items-center justify-center">
-                  📝
-                </div>
-                Brouillons et envoyés
-              </div>
-              <span className="text-xs bg-white/10 px-1.5 rounded">1</span>
-            </button>
+        {/* Empty State Message */}
+        <div className="px-4 py-3">
+          <div className="flex items-start">
+            <span className="text-white/70 text-3xl mr-3">👋</span>
+            <p className="text-white/70 text-sm">
+              Personne ne manque à l'appel ? Ajoutez votre équipe et lancez la conversation.
+            </p>
           </div>
+          <button className="mt-2 px-3 py-1 text-sm text-white bg-white/10 rounded hover:bg-white/20">
+            Ajouter des collègues
+          </button>
+        </div>
 
-          {/* Channels */}
-          <div>
-            <div className="flex items-center justify-between px-2 py-1 text-white/70 hover:text-white cursor-pointer">
-              <div className="flex items-center">
-                <ChevronDown size={16} className="mr-1" />
-                <span className="text-sm font-medium">Canaux</span>
-              </div>
+        {/* Direct Messages List */}
+        <div className="flex-1 overflow-y-auto px-2 py-3">
+          {/* Direct Message Items */}
+          <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
+            <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+            Androuz
+          </button>
+          <button className="w-full text-white bg-[#1164A3] px-2 py-1 text-sm flex items-center rounded">
+            <div className="relative mr-2">
+              <img src={avatar} alt="Andriniaina" className="w-4 h-4 rounded-full" />
+              <div className="absolute bottom-0 right-0 w-1.5 h-1.5 bg-green-500 rounded-full border border-[#1164A3]"></div>
             </div>
-            <div className="mt-1 space-y-0.5">
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Hash size={16} className="mr-2" />
-                nouveau-canal
-              </button>
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Hash size={16} className="mr-2" />
-                social
-              </button>
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Hash size={16} className="mr-2" />
-                tous-koto-sa
-              </button>
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Plus size={16} className="mr-2" />
-                Ajouter des canaux
-              </button>
-            </div>
-          </div>
-
-          {/* Direct Messages */}
-          <div>
-            <div className="flex items-center justify-between px-2 py-1 text-white/70 hover:text-white cursor-pointer">
-              <div className="flex items-center">
-                <ChevronDown size={16} className="mr-1" />
-                <span className="text-sm font-medium">Messages directs</span>
-              </div>
-            </div>
-            <div className="mt-1 space-y-0.5">
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-                Androuz
-              </button>
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <div className="w-4 h-4 rounded-full bg-gray-500 mr-2"></div>
-                Andriniaina
-                <span className="ml-1 text-xs text-white/50">vous</span>
-              </button>
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Plus size={16} className="mr-2" />
-                Ajouter des collègues
-              </button>
-            </div>
-          </div>
+            Andriniaina
+            <span className="ml-1 text-xs text-white/50">vous</span>
+          </button>
         </div>
       </div>
 
@@ -227,4 +191,4 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
+} 

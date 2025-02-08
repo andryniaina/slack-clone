@@ -2,6 +2,8 @@ import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
 import Login from '../views/pages/Login';
 import Register from '../views/pages/Register';
 import Dashboard from '../views/pages/Dashboard';
+import DirectMessages from '../views/pages/Directs';
+import Activity from '../views/pages/Activity';
 import AuthenticatedLayout from '../views/layouts/AuthenticatedLayout';
 import { AuthProvider } from '../contexts/AuthContext';
 import { AuthService } from '../services/auth';
@@ -65,6 +67,14 @@ export const router = createBrowserRouter([
               {
                 path: 'dashboard',
                 element: <Dashboard />,
+              },
+              {
+                path: 'directs',
+                element: <DirectMessages />,
+              },
+              {
+                path: 'activity',
+                element: <Activity />,
               },
             ],
           },

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, User } from 'lucide-react';
 import { AuthService } from '../../../services/auth';
 import { useAuth } from '../../../contexts/AuthContext';
 
 export default function Register() {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -21,6 +22,10 @@ export default function Register() {
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError('L\'adresse e-mail n\'est pas valide');
+      return false;
+    }
+    if (!username) {
+      setError('Le nom d\'utilisateur est requis');
       return false;
     }
     if (!password) {
@@ -46,7 +51,7 @@ export default function Register() {
 
     try {
       setLoading(true);
-      const response = await AuthService.register({ email, password });
+      const response = await AuthService.register({ email, password, username });
       await login(response.token);
     } catch (err: any) {
       if (err.response?.data?.message === 'Email already exists') {
@@ -71,7 +76,7 @@ export default function Register() {
             alt="Slack"
           />
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            D'abord, entrez votre e-mail
+            Créer votre compte
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Nous vous suggérons d'utiliser l'adresse e-mail que vous utilisez au travail.
@@ -87,6 +92,28 @@ export default function Register() {
           )}
 
           <div className="rounded-md shadow-sm space-y-4">
+            <div>
+              <label htmlFor="username" className="sr-only">
+                Nom d'utilisateur
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                </div>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  disabled={loading}
+                  className="appearance-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  placeholder="Nom d'utilisateur"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+            </div>
             <div>
               <label htmlFor="email" className="sr-only">
                 Adresse e-mail
