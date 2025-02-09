@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 
 interface FindAllOptions {
   excludeSystem?: boolean;
+  excludeUser?: string | Types.ObjectId;
 }
 
 @Injectable()
@@ -66,6 +67,10 @@ export class UserService {
 
     if (options.excludeSystem) {
       query.where('email').ne('system@koto.sa');
+    }
+
+    if (options.excludeUser) {
+      query.where('_id').ne(options.excludeUser);
     }
 
     const users = await query.exec();

@@ -26,6 +26,23 @@ export class AuthService {
         { $addToSet: { members: user._id } }
       );
 
+      const otherUsers = await this.userService.findAll({
+        excludeSystem: true,
+        excludeUser: user._id
+      });
+
+      const directChannelsPromises = otherUsers.map(async (otherUser) => {
+        return this.channelModel.create({
+          name: `${user.username} - ${otherUser.username}`,
+          type: ChannelType.DIRECT,
+          members: [user._id, otherUser._id],
+          participants: [user._id, otherUser._id],
+          createdBy: user._id
+        });
+      });
+
+      await Promise.all(directChannelsPromises);
+
       const token = this.generateToken(user._id.toString());
       return { token };
     } catch (error) {
