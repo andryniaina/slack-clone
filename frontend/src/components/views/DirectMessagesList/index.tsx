@@ -1,10 +1,9 @@
 import { User } from '../../../data/dtos/user';
 import { Message } from '../../../data/dtos/message';
 import { DirectMessageItem } from '../DirectMessageItem';
-import { Plus, ChevronDown, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { sortUsersWithCurrentUserLast } from '../../../utils/user';
-import clsx from 'clsx';
 
 interface DirectMessagesListProps {
   users: User[];
@@ -20,8 +19,7 @@ export function DirectMessagesList({
   selectedUser,
   onUserSelect,
   isLoading,
-  lastMessages,
-  onAddColleaguesClick
+  lastMessages
 }: DirectMessagesListProps) {
   const { user: currentUser } = useAuth();
   

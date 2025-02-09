@@ -5,6 +5,10 @@ import { User, UserDocument } from './schemas/user.schema';
 import { RegisterDto, UpdateProfileDto } from './dto/auth.dto';
 import * as bcrypt from 'bcrypt';
 
+interface FindAllOptions {
+  excludeSystem?: boolean;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -54,15 +58,19 @@ export class UserService {
 
   /**
    * Récupère tous les utilisateurs
+   * @param options Options de filtrage
    * @returns Liste des utilisateurs avec leurs informations de base
    */
-  async findAll(): Promise<User[]> {
-    console.log("findAll");
-    const users = await this.userModel.find().exec();
-    console.log("users", users);
+  async findAll(options: FindAllOptions = {}): Promise<User[]> {
+    const query = this.userModel.find();
+
+    if (options.excludeSystem) {
+      query.where('email').ne('system@koto.sa');
+    }
+
+    const users = await query.exec();
     return users;
   }
-
 
   async addSocketId(userId: Types.ObjectId, socketId: string): Promise<User> {
     const user = await this.userModel.findByIdAndUpdate(

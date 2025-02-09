@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Hash, ChevronLeft, Link } from 'lucide-react';
+import { X, Hash, ChevronLeft} from 'lucide-react';
 import { ChannelType } from '../../../data/dtos/channel';
 import { ChannelService } from '../../../services/channel';
 import { useQueryClient } from '@tanstack/react-query';

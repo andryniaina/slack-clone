@@ -8,11 +8,11 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   /**
-   * Récupère la liste de tous les utilisateurs
+   * Récupère la liste de tous les utilisateurs sauf le compte système
    * @returns Liste des utilisateurs avec leurs informations de base
    */
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.findAll({ excludeSystem: true });
   }
 } 

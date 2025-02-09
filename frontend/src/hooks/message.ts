@@ -6,22 +6,29 @@ import { useEffect } from 'react';
 
 const MESSAGE_QUERY_KEY = 'messages';
 
-export function useChannelMessages(channelId: string) {
+export function useChannelMessages(channelId: string | undefined) {
   const queryClient = useQueryClient();
   const { socket } = useWebSocket();
 
   // Requête initiale pour charger les messages
   const query = useQuery<Message[], Error>({
     queryKey: [MESSAGE_QUERY_KEY, channelId],
-    queryFn: () => MessageService.getChannelMessages(channelId),
+    queryFn: () => {
+      if (!channelId) {
+        return Promise.resolve([]);
+      }
+      return MessageService.getChannelMessages(channelId);
+    },
     staleTime: Infinity, // Les messages ne deviennent jamais périmés automatiquement
+    enabled: !!channelId // N'exécute la requête que si channelId existe
   });
 
   // Écouter les nouveaux messages via WebSocket
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !channelId) return;
 
     const handleNewMessage = (message: Message) => {
+      console.log('message', message);
       if (message.channel === channelId) {
         // Invalider la requête pour déclencher un nouveau fetch
         queryClient.invalidateQueries({
@@ -63,17 +70,17 @@ export function useSendMessage() {
   return mutation;
 }
 
-export function useTypingStatus(channelId: string) {
+export function useTypingStatus(channelId: string | undefined) {
   const { socket } = useWebSocket();
   const queryClient = useQueryClient();
 
   const setTyping = (isTyping: boolean) => {
-    if (!socket) return;
+    if (!socket || !channelId) return;
     socket.emit('typing', { channelId, isTyping });
   };
 
   useEffect(() => {
-    if (!socket) return;
+    if (!socket || !channelId) return;
 
     const handleUserTyping = ({ userId, channelId: typingChannelId, isTyping }: any) => {
       if (typingChannelId === channelId) {
@@ -99,6 +106,7 @@ export function useTypingStatus(channelId: string) {
     queryKey: ['typingUsers', channelId],
     queryFn: () => [],
     initialData: [],
+    enabled: !!channelId,
   });
 
   return { setTyping, typingUsers: typingUsers.data };
