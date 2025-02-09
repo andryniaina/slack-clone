@@ -117,4 +117,25 @@ export class UserService {
 
     return user;
   }
+
+  /**
+   * Trouve un utilisateur par son nom d'utilisateur
+   */
+  async findByUsername(username: string) {
+    return this.userModel.findOne({ username }).exec();
+  }
+
+  /**
+   * Met à jour le nom d'utilisateur
+   */
+  async updateUsername(userId: string, username: string) {
+    return this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { username },
+        { new: true }
+      )
+      .select('-password')
+      .exec();
+  }
 } 

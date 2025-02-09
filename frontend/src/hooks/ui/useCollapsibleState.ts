@@ -13,8 +13,12 @@ type CollapsibleState = Record<string, boolean>;
 export function useCollapsibleState(storageKey: string, initialState: CollapsibleState): [CollapsibleState, (sectionId: string) => void] {
   // Initialiser l'état avec les valeurs du localStorage ou l'état initial
   const [state, setState] = useState<CollapsibleState>(() => {
-    const savedState = localStorage.getItem(storageKey);
-    return savedState ? JSON.parse(savedState) : initialState;
+    try {
+      const savedState = localStorage.getItem(storageKey);
+      return savedState ? JSON.parse(savedState) : initialState;
+    } catch (error) {
+      return initialState;
+    }
   });
 
   // Sauvegarder l'état dans le localStorage à chaque changement

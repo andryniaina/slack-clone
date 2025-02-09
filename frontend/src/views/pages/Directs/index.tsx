@@ -40,18 +40,6 @@ export default function Directs() {
   // Contenu du header pour le chat
   const headerRightContent = (
     <div className="flex items-center gap-3">
-      <button className="text-gray-600 hover:text-gray-800">
-        <MoreVertical className="w-5 h-5" />
-      </button>
-      <button
-        onClick={() => {
-          setSelectedChannel(null);
-          setSelectedUser(null);
-        }}
-        className="text-gray-600 hover:text-gray-800"
-      >
-        <X className="w-5 h-5" />
-      </button>
     </div>
   );
 

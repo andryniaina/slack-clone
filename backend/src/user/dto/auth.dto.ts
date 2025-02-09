@@ -35,3 +35,11 @@ export class UpdateProfileDto {
   @IsString()
   avatar?: string;
 } 
+
+export class UpdateUsernameDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+}
+
+
