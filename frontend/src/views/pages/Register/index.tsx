@@ -96,10 +96,8 @@ export default function Register() {
               <label htmlFor="username" className="sr-only">
                 Nom d'utilisateur
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                </div>
+              <div className="relative flex items-center">
+                <User className="absolute left-3 h-5 w-5 text-gray-500" aria-hidden="true" />
                 <input
                   id="username"
                   name="username"
@@ -107,7 +105,7 @@ export default function Register() {
                   autoComplete="username"
                   required
                   disabled={loading}
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Nom d'utilisateur"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
@@ -118,10 +116,8 @@ export default function Register() {
               <label htmlFor="email" className="sr-only">
                 Adresse e-mail
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                </div>
+              <div className="relative flex items-center">
+                <Mail className="absolute left-3 h-5 w-5 text-gray-500" aria-hidden="true" />
                 <input
                   id="email"
                   name="email"
@@ -129,7 +125,7 @@ export default function Register() {
                   autoComplete="email"
                   required
                   disabled={loading}
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="nom@email-travail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -140,10 +136,8 @@ export default function Register() {
               <label htmlFor="password" className="sr-only">
                 Mot de passe
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                </div>
+              <div className="relative flex items-center">
+                <Lock className="absolute left-3 h-5 w-5 text-gray-500" aria-hidden="true" />
                 <input
                   id="password"
                   name="password"
@@ -151,7 +145,7 @@ export default function Register() {
                   autoComplete="new-password"
                   required
                   disabled={loading}
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Mot de passe (minimum 6 caractères)"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -175,10 +169,8 @@ export default function Register() {
               <label htmlFor="confirmPassword" className="sr-only">
                 Confirmer le mot de passe
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                </div>
+              <div className="relative flex items-center">
+                <Lock className="absolute left-3 h-5 w-5 text-gray-500" aria-hidden="true" />
                 <input
                   id="confirmPassword"
                   name="confirmPassword"
@@ -186,7 +178,7 @@ export default function Register() {
                   autoComplete="new-password"
                   required
                   disabled={loading}
-                  className="appearance-none relative block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 focus:z-10 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
+                  className="appearance-none block w-full px-3 py-2 pl-10 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm bg-white disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="Confirmer le mot de passe"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
