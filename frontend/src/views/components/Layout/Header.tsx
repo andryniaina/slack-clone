@@ -39,9 +39,9 @@ export function Header() {
           <input
             type="text"
             placeholder="Rechercher un canal ou un utilisateur"
-            className="w-full h-7 bg-[#5B315E] text-white placeholder-white text-sm px-8 rounded border border-white/30 focus:outline-none focus:border-white/60"
+            className="w-full h-7 bg-[#5B315E] text-white placeholder-white/70 text-sm px-8 rounded border border-white/10 focus:outline-none focus:border-white/30 focus:bg-[#6B3B6E] transition-colors duration-150"
           />
-          <Search size={14} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-white/60" />
+          <Search size={14} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-white/70" />
         </div>
       </div>
 

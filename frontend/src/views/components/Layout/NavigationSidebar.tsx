@@ -4,15 +4,19 @@ import { useLocation } from 'react-router-dom';
 import { Tooltip } from '../UI/Tooltip';
 import { useAuth } from '../../../contexts/AuthContext';
 import { UserProfileModal } from './UserProfileModal';
+import { CreateNewModal } from './CreateNewModal';
+import { CreateChannelModal } from '../Dashboard/CreateChannelModal';
 import { EditProfileModal } from '../Profile/EditProfileModal';
 import { useState } from 'react';
-import clsx from 'clsx';
 
 export function NavigationSidebar() {
   const location = useLocation();
   const { user, logout } = useAuth();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isCreateNewModalOpen, setIsCreateNewModalOpen] = useState(false);
+  const [isChannelCreationModalOpen, setIsChannelCreationModalOpen] = useState(false);
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [isSpinning, setIsSpinning] = useState(false);
   const isActive = (path: string) => location.pathname === path;
 
   const handleLogout = async () => {
@@ -26,6 +30,17 @@ export function NavigationSidebar() {
   const handleEditProfileClick = () => {
     setIsProfileModalOpen(false);
     setIsEditProfileModalOpen(true);
+  };
+
+  const handleChannelCreationClick = () => {
+    setIsCreateNewModalOpen(false);
+    setIsChannelCreationModalOpen(true);
+  };
+
+  const handleCreateNewClick = () => {
+    setIsSpinning(true);
+    setIsCreateNewModalOpen(!isCreateNewModalOpen);
+    setTimeout(() => setIsSpinning(false), 300);
   };
 
   const userTooltipContent = (
@@ -78,14 +93,46 @@ export function NavigationSidebar() {
         </div>
       </div>
 
-      {/* Bottom Section */}
-      <div className="mt-4 w-full flex flex-col items-center space-y-3">
-        {/* Plus Button */}
-        <Tooltip content="Créer un nouveau" position="right">
-          <button className="w-9 h-9 bg-[#542C56] rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-transform duration-100 hover:scale-110">
-            <Plus size={20} />
+      {/* Plus */}
+      <div className="w-full flex flex-col items-center mt-4 mb-2 relative">
+        {!isCreateNewModalOpen ? (
+          <Tooltip content="Créer un nouveau" position="right">
+            <button 
+              onClick={handleCreateNewClick}
+              className="w-9 h-9 bg-[#542C56] rounded-full flex items-center justify-center text-white hover:scale-110 transition-transform duration-100"
+            >
+              <Plus 
+                size={20}
+                className={isSpinning ? "animate-spin [animation-duration:300ms] [animation-iteration-count:1] [animation-timing-function:ease-in-out]" : ""}
+              />
+            </button>
+          </Tooltip>
+        ) : (
+          <button 
+            onClick={handleCreateNewClick}
+            className="w-9 h-9 bg-white rounded-full flex items-center justify-center text-[#431343] shadow-lg transition-all duration-300 ease-in-out hover:scale-110"
+          >
+            <Plus 
+              size={20}
+              className={isSpinning ? "animate-spin [animation-duration:300ms] [animation-iteration-count:1] [animation-timing-function:ease-in-out]" : ""}
+            />
           </button>
-        </Tooltip>
+        )}
+
+        <CreateNewModal
+          isOpen={isCreateNewModalOpen}
+          onClose={() => {
+            setIsSpinning(true);
+            setIsCreateNewModalOpen(false);
+            setTimeout(() => setIsSpinning(false), 300);
+          }}
+          onCreateChannel={handleChannelCreationClick}
+        />
+
+        <CreateChannelModal
+          isOpen={isChannelCreationModalOpen}
+          onClose={() => setIsChannelCreationModalOpen(false)}
+        />
       </div>
 
       {/* Avatar */}

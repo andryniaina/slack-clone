@@ -69,7 +69,7 @@ export function UserProfileModal({
       <div className="p-2 space-y-1">
         <button
           onClick={onEditProfile}
-          className="w-full text-left px-3 py-2 text-gray-700 hover:bg-gray-50 rounded transition-all duration-150 ease-in-out"
+          className="w-full text-left px-3 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-700 hover:shadow-sm rounded transition-all duration-150 ease-in-out group"
         >
           Modifier profil
         </button>
