@@ -6,6 +6,7 @@ import { ChatMessageList } from './ChatMessageList';
 import { ChatInput } from './ChatInput';
 import { useTypingStatus } from '../../../hooks/message/useMessages';
 import { User } from '../../../data/dtos/user';
+import { ChatErrorBoundary } from '../ErrorBoundary/ChatErrorBoundary';
 
 interface ChatContainerProps {
   channel: Channel | null;
@@ -49,21 +50,27 @@ export function ChatContainer({
 
   return (
     <div className="flex-1 flex flex-col bg-white">
-      <ChatHeader 
-        channel={channel}
-        rightContent={headerRightContent}
-        selectedUser={selectedUser}
-      />
-      
-      <ChatMessageList 
-        messages={messages}
-        isLoading={isLoadingMessages}
-      />
-      
-      <ChatInput 
-        onSendMessage={onSendMessage}
-        onTyping={setTyping}
-      />
+      <ChatErrorBoundary>
+        {channel && (
+          <div className="flex-1 flex flex-col w-full h-full">
+            <ChatHeader 
+              channel={channel}
+              rightContent={headerRightContent}
+              selectedUser={selectedUser}
+            />
+            
+            <ChatMessageList 
+              messages={messages}
+              isLoading={isLoadingMessages}
+            />
+            
+            <ChatInput 
+              onSendMessage={onSendMessage}
+              onTyping={setTyping}
+            />
+          </div>
+        )}
+      </ChatErrorBoundary>
     </div>
   );
 } 

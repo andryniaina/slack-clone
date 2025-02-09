@@ -38,7 +38,7 @@ export function ChatMessageList({ messages, isLoading }: ChatMessageListProps) {
   }
 
   // Sort messages by date first (oldest to newest)
-  const sortedMessages = [...messages].sort((a, b) => 
+  const sortedMessages = [...messages].sort((a, b) =>
     new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
   );
 
@@ -53,7 +53,7 @@ export function ChatMessageList({ messages, isLoading }: ChatMessageListProps) {
   }, {} as Record<string, MessageType[]>);
 
   // Get dates in chronological order (oldest first)
-  const sortedDates = Object.keys(messagesByDate).sort((a, b) => 
+  const sortedDates = Object.keys(messagesByDate).sort((a, b) =>
     new Date(a).getTime() - new Date(b).getTime()
   );
 
@@ -82,8 +82,8 @@ export function ChatMessageList({ messages, isLoading }: ChatMessageListProps) {
                     index === 0 ||
                     messagesByDate[date][index - 1].sender._id !== message.sender._id ||
                     new Date(message.createdAt).getTime() -
-                      new Date(messagesByDate[date][index - 1].createdAt).getTime() >
-                      5 * 60 * 1000;
+                    new Date(messagesByDate[date][index - 1].createdAt).getTime() >
+                    5 * 60 * 1000;
 
                   return (
                     <Message
