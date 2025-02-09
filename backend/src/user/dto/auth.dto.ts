@@ -42,4 +42,14 @@ export class UpdateUsernameDto {
   username: string;
 }
 
+export class UpdatePasswordDto {
+  @IsString()
+  @MinLength(6)
+  currentPassword: string;
+
+  @IsString()
+  @MinLength(6)
+  newPassword: string;
+}
+
 

@@ -5,6 +5,7 @@ const USER_ENDPOINTS = {
   ME: '/auth/me',
   ALL: '/user',
   UPDATE_USERNAME: '/user/profile/username',
+  UPDATE_PASSWORD: '/user/profile/password',
 };
 
 export const UserService = {
@@ -23,6 +24,17 @@ export const UserService = {
    */
   async updateUsername(username: string): Promise<User> {
     const response = await api.patch<User>(USER_ENDPOINTS.UPDATE_USERNAME, { username });
+    return response.data;
+  },
+  /**
+   * Met à jour le mot de passe de l'utilisateur
+   * @throws UnauthorizedException si le mot de passe actuel est incorrect
+   */
+  async updatePassword(currentPassword: string, newPassword: string): Promise<User> {
+    const response = await api.patch<User>(USER_ENDPOINTS.UPDATE_PASSWORD, {
+      currentPassword,
+      newPassword,
+    });
     return response.data;
   },
 };

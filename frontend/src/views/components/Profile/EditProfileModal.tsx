@@ -57,12 +57,31 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
 
   const isUsernameValid = username.trim().length >= 3 && username !== user?.username;
 
-  const handleSave = async () => {
-    if (activeTab === 'profile') {
-      try {
-        setIsLoading(true);
-        setError(null);
+  const validatePasswordForm = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setError('Tous les champs sont requis');
+      return false;
+    }
 
+    if (newPassword.length < 6) {
+      setError('Le nouveau mot de passe doit contenir au moins 6 caractères');
+      return false;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError('Les nouveaux mots de passe ne correspondent pas');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (activeTab === 'profile') {
         if (!isUsernameValid) {
           return;
         }
@@ -74,17 +93,37 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
         queryClient.invalidateQueries({ queryKey: USERS_QUERY_KEY });
         
         onClose();
-      } catch (err: any) {
-        if (err.response?.status === 409) {
-          setError('Ce nom d\'utilisateur est déjà pris');
-        } else {
-          setError('Une erreur est survenue lors de la mise à jour du profil');
+      } else if (activeTab === 'security') {
+        if (!validatePasswordForm()) {
+          setIsLoading(false);
+          return;
         }
-      } finally {
-        setIsLoading(false);
+
+        await UserService.updatePassword(currentPassword, newPassword);
+        
+        // Réinitialiser les champs
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        
+        onClose();
       }
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        setError('Le mot de passe actuel est incorrect');
+      } else if (err.response?.status === 409) {
+        setError('Ce nom d\'utilisateur est déjà pris');
+      } else {
+        setError('Une erreur est survenue lors de la mise à jour du profil');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const isFormValid = activeTab === 'profile' 
+    ? isUsernameValid
+    : true; // Always enable the button for security tab
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -223,10 +262,10 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
           </button>
           <button
             onClick={handleSave}
-            disabled={activeTab === 'profile' ? !isUsernameValid || isLoading : isLoading}
+            disabled={!isFormValid || isLoading}
             className={clsx(
               "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-              (activeTab === 'profile' && (!isUsernameValid || isLoading)) || isLoading
+              (!isFormValid || isLoading)
                 ? "bg-[#007a5a]/50 text-white cursor-not-allowed"
                 : "bg-[#007a5a] text-white hover:bg-[#006c4f]"
             )}

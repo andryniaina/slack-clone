@@ -33,7 +33,7 @@ export class UserService {
   }
 
   async findById(userId: Types.ObjectId): Promise<User> {
-    const user = await this.userModel.findById(userId);
+    const user = await this.userModel.findById(userId).select('+password');
     if (!user) {
       throw new NotFoundException('Utilisateur non trouvé');
     }
@@ -137,5 +137,28 @@ export class UserService {
       )
       .select('-password')
       .exec();
+  }
+
+  /**
+   * Met à jour le mot de passe d'un utilisateur
+   * @param userId ID de l'utilisateur
+   * @param hashedPassword Nouveau mot de passe hashé
+   * @returns L'utilisateur mis à jour
+   */
+  async updatePassword(userId: string, hashedPassword: string): Promise<User> {
+    const user = await this.userModel
+      .findByIdAndUpdate(
+        userId,
+        { $set: { password: hashedPassword } },
+        { new: true }
+      )
+      .select('-password')
+      .exec();
+      
+    if (!user) {
+      throw new NotFoundException('Utilisateur non trouvé');
+    }
+    
+    return user;
   }
 } 
