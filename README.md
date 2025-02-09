@@ -107,7 +107,7 @@ Une fois connecté, vous accédez au dashboard qui comprend :
   - Indication "(vous)" pour votre propre utilisateur
 
 **Zone principale :**
-- Zone de chat avec message d'accueil "Aucun message dans ce canal"
+- Zone de chat
 - Zone de saisie en bas pour envoyer des messages
 - Description du canal en haut (ex: "Canal général pour toute l'entreprise")
 
