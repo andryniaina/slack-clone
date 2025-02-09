@@ -99,6 +99,38 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
     }
   }
 
+  @SubscribeMessage('join_new_channels')
+  async handleJoinNewChannels(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() userId: string
+  ) {
+    try {
+      const user = await this.userService.findById(new Types.ObjectId(userId));
+      if (!user) {
+        client.emit('error', { message: 'Utilisateur non trouvé' });
+        return;
+      }
+
+      // Récupérer tous les canaux de l'utilisateur
+      const channels = await this.channelService.findUserChannels(user._id);
+      
+      // Rejoindre chaque canal
+      for (const channel of channels) {
+        client.join(channel._id.toString());
+      }
+
+      client.emit('channels_joined', {
+        message: 'Nouveaux canaux rejoints avec succès',
+        channelCount: channels.length
+      });
+
+      console.log(`User ${user.email} joined ${channels.length} channels`);
+    } catch (error) {
+      console.error('Error joining new channels:', error);
+      client.emit('error', { message: 'Erreur lors de la connexion aux nouveaux canaux' });
+    }
+  }
+
   @SubscribeMessage('sendMessage')
   async handleMessage(
     @ConnectedSocket() client: Socket,

@@ -80,6 +80,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         // Écouter les changements de statut de connexion
         socket.on('connectionStatusChanged', ({ userId, isOnline }) => {
           console.log('Statut de connexion modifié:', { userId, isOnline });
+          socket.emit('join_new_channels', user._id);
           // Invalider la requête des utilisateurs pour forcer une mise à jour
           queryClient.invalidateQueries({ queryKey: ['users'] });
         });
