@@ -1,7 +1,6 @@
 import { ChatContainer } from '../../components/Chat/ChatContainer';
 import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
 import { useChat, useDirectMessages } from '../../../hooks/chat';
-import { X, MoreVertical } from 'lucide-react';
 import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
@@ -20,8 +19,6 @@ export default function Directs() {
     selectedChannel,
     isLoadingUsers,
     handleUserSelect,
-    setSelectedUser,
-    setSelectedChannel
   } = useDirectMessages();
 
   // Sélectionner automatiquement le premier utilisateur lorsque la liste est chargée

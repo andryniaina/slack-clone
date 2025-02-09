@@ -4,7 +4,7 @@ import { SidebarChannelItem } from '../../components/Dashboard/SidebarChannelIte
 import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
 import { CreateChannelModal } from '../../components/Dashboard/CreateChannelModal';
 import { useChat, useChannelSelection, useDirectMessages } from '../../../hooks/chat';
-import { X, MoreVertical, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';

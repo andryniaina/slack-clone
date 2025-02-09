@@ -8,13 +8,4 @@ services:
     container_name: slack-frontend
     ports:
       - "5025:80"
-    environment:
-      - NODE_ENV=production
     restart: unless-stopped
-    networks:
-      - slack-network
-
-networks:
-  slack-network:
-    name: slack-network
-    driver: bridge 

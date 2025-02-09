@@ -1,50 +1,76 @@
-# React + TypeScript + Vite
+# Slack Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application de messagerie d'entreprise construite avec des technologies modernes et une architecture robuste.
 
-Currently, two official plugins are available:
+## 🚀 Démarrage rapide
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prérequis
+- Node.js >= 18.x
+- npm >= 9.x
 
-## Expanding the ESLint configuration
+### Installation et développement
+```bash
+# Installation des dépendances avec une gestion stricte des versions
+npm ci
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# Lancement en mode développement avec HMR
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Docker
+```bash
+# Construction de l'image
+docker build -t slack-frontend .
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+# Lancement du conteneur
+docker-compose up -d
 ```
+
+## 🏗️ Architecture du projet
+
+```
+src/
+├── assets/         # Ressources statiques (images, fonts)
+├── config/         # Configuration de l'application
+├── contexts/       # Contextes React (auth, websocket)
+├── data/           # Types, DTOs et interfaces
+├── hooks/          # Hooks React personnalisés
+├── routes/         # Routes de l'application
+├── services/       # Services d'API et logique métier
+├── utils/          # Utilitaires et helpers
+└── views/          # Pages et composants spécifiques aux vues
+    ├── components/ # Composants spécifiques aux vues
+    ├── layouts/    # Layouts de l'application
+    └── pages/      # Pages principales
+```
+
+## 🛠️ Stack technique
+
+### Core
+- **React 19** - Framework UI avec support des Hooks et du Concurrent Mode
+- **TypeScript** - Typage statique strict pour une meilleure maintenabilité
+- **Vite** - Build tool ultra-rapide avec HMR instantané
+
+### State Management & Data Fetching
+- **TanStack Query** (React Query v5) - Gestion du state serveur avec cache intelligent
+- **React Context** - State management local avec patterns optimisés
+
+### Styling & UI
+- **Tailwind CSS** - Utilitaires CSS avec JIT pour un bundle optimisé
+- **Lucide Icons** - Icons SVG optimisés et cohérents
+- **clsx** - Gestion conditionnelle des classes CSS
+
+### Websocket
+- **Socket.IO Client** - Communication temps réel bidirectionnelle
+
+### Routing
+- **React Router v6** - Routing déclaratif avec support du code splitting
+
+### Sécurité & Auth
+- **JWT** - Authentification stateless avec refresh token
+- **Secure HTTP-only cookies** - Stockage sécurisé des tokens
+
+### Dev Tools
+- **ESLint** - Linting avec règles strictes pour TypeScript et React
+- **Prettier** - Formatage de code consistant
+- **TypeScript** - Configuration stricte pour une type safety maximale
