@@ -6,6 +6,12 @@ import { useEffect } from 'react';
 
 const MESSAGE_QUERY_KEY = 'messages';
 
+// Clé de query pour les messages
+export const MESSAGES_QUERY_KEY = ['messages'] as const;
+
+// Clé de query pour les utilisateurs en train de taper
+export const TYPING_USERS_QUERY_KEY = ['typingUsers'] as const;
+
 export function useChannelMessages(channelId: string | undefined) {
   const queryClient = useQueryClient();
   const { socket } = useWebSocket();

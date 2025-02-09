@@ -1,5 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 
+// Props pour le composant de formulaire d'entrée
 interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon: LucideIcon;
   rightElement?: React.ReactNode;

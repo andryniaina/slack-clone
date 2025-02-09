@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
+// Type pour l'état des sections réductibles
 type CollapsibleState = Record<string, boolean>;
 
 /**
