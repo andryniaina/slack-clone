@@ -85,7 +85,7 @@ Connectez-vous avec :
 - **Mot de passe** : Votre mot de passe
 
 ### 3. Dashboard
-![Page principale](docs/screenshots/Dashboard.png)
+![Page principale](docs/screenshots/CanalChat.png)
 
 Une fois connecté, vous accédez au dashboard qui comprend :
 

@@ -20,8 +20,10 @@ export function SidebarUserItem({ user, isSelected, onClick }: SidebarUserItemPr
     <button
       onClick={onClick}
       className={clsx(
-        "w-full text-left hover:bg-[#350D36] px-2 py-1.5 rounded group flex items-center",
-        isSelected ? "bg-[#1164A3] hover:bg-[#1164A3]" : "text-white/70"
+        "w-full text-left px-2 py-1.5 rounded group flex items-center",
+        isSelected 
+          ? "bg-[#F9EDFF]" 
+          : "text-white/70 hover:bg-[#350D36] hover:text-white"
       )}
     >
       {/* Avatar avec indicateur de statut */}
@@ -40,10 +42,10 @@ export function SidebarUserItem({ user, isSelected, onClick }: SidebarUserItemPr
       {/* Nom d'utilisateur */}
       <span className={clsx(
         "ml-2 text-sm truncate",
-        isSelected ? "text-white" : "text-white/90 group-hover:text-white"
+        isSelected ? "text-[#69406B]" : "text-white/90"
       )}>
         {user.username || user.email}
-        {isCurrentUser && <span className="text-white/60 ml-1">(vous)</span>}
+        {isCurrentUser && <span className={clsx("ml-1", isSelected ? "text-[#69406B]/60" : "text-white/60")}>(vous)</span>}
       </span>
     </button>
   );
