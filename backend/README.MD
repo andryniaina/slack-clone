@@ -22,12 +22,12 @@ JWT_SECRET=dev-secret-key
 JWT_EXPIRES_IN=24h
 ```
 
-### Installation et développement
+### Installation et lancement du serveur
 ```bash
 # Installation des dépendances
 npm install
 
-# Développement avec hot-reload
+# Lancement du serveur
 npm run start
 ```
 
