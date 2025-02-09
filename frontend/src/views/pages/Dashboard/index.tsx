@@ -4,13 +4,22 @@ import { SidebarChannelItem } from '../../components/Dashboard/SidebarChannelIte
 import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
 import { CreateChannelModal } from '../../components/Dashboard/CreateChannelModal';
 import { useChat, useChannelSelection, useDirectMessages } from '../../../hooks/chat';
-import { Plus } from 'lucide-react';
+import { Plus, RefreshCw } from 'lucide-react';
 import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
 import { Channel } from '../../../data/dtos/channel';
+import { useQueryClient } from '@tanstack/react-query';
+import { CHANNELS_QUERY_KEYS } from '../../../hooks/channel';
+import { useWebSocket } from '../../../contexts/WebSocketContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 export default function Dashboard() {
+  const { socket } = useWebSocket();
+  const { user: currentUser } = useAuth();
+  const queryClient = useQueryClient();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   // État modal
   const [isCreateChannelModalOpen, setIsCreateChannelModalOpen] = useState(false);
 
@@ -47,6 +56,19 @@ export default function Dashboard() {
     setSelectedUser(null);
     setSelectedDirectChannel(null);
     handleChannelSelect(channel);
+  };
+
+  const handleRefreshChannels = async () => {
+    setIsRefreshing(true);
+    try {
+      await queryClient.invalidateQueries({ queryKey: CHANNELS_QUERY_KEYS.accessible() });
+      // Rejoindre les nouveaux canaux via WebSocket
+      if (socket && currentUser) {
+        socket.emit('join_new_channels', currentUser._id);
+      }
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   // Sélection automatique par défaut selon la hiérarchie
@@ -111,6 +133,22 @@ export default function Dashboard() {
             isCollapsible={true}
             isCollapsed={collapsibleState.channels}
             onToggle={() => toggleSection('channels')}
+            rightContent={
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRefreshChannels();
+                }}
+                disabled={isRefreshing || isLoadingChannels}
+                className="p-1 text-white/70 hover:text-white transition-colors disabled:opacity-50"
+                title="Rafraîchir la liste des canaux"
+              >
+                <RefreshCw 
+                  size={14} 
+                  className={isRefreshing ? "animate-spin" : ""}
+                />
+              </button>
+            }
           >
             {isLoadingChannels ? (
               <div className="px-2 py-4 text-white/70 text-sm text-center">

@@ -8,6 +8,7 @@ interface SidebarSectionProps {
   isCollapsible?: boolean;
   isCollapsed?: boolean;
   onToggle?: () => void;
+  rightContent?: ReactNode;
   className?: string;
 }
 
@@ -17,6 +18,7 @@ export function SidebarSection({
   isCollapsible = false,
   isCollapsed = false,
   onToggle,
+  rightContent,
   className
 }: SidebarSectionProps) {
   return (
@@ -28,14 +30,21 @@ export function SidebarSection({
       >
         <div className="flex items-center">
           {isCollapsible && (
-            isCollapsed ? (
-              <ChevronRight size={16} className="mr-1" />
-            ) : (
-              <ChevronDown size={16} className="mr-1" />
-            )
+            <button
+              className="text-white/70 hover:text-white mr-1"
+            >
+              {isCollapsed ? (
+                <ChevronRight size={18} />
+              ) : (
+                <ChevronDown size={18} />
+              )}
+            </button>
           )}
-          <span className="text-sm font-medium">{title}</span>
+          <h3 className="text-white/70 uppercase text-xs font-medium tracking-wider">
+            {title}
+          </h3>
         </div>
+        {rightContent}
       </div>
 
       {/* Content */}

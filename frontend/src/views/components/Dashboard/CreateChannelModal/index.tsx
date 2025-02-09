@@ -9,6 +9,7 @@ import clsx from 'clsx';
 
 import avatar from '../../../../assets/images/avatar.png';
 import { useAuth } from '../../../../contexts/AuthContext';
+import { useWebSocket } from '../../../../contexts/WebSocketContext';
 
 
 interface CreateChannelModalProps {
@@ -17,6 +18,7 @@ interface CreateChannelModalProps {
 }
 
 export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps) {
+  const { socket } = useWebSocket();
   const { user: currentUser } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -38,7 +40,13 @@ export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps)
         members: selectedMembers,
       });
 
+      // Rejoindre le nouveau canal via WebSocket
+      if (socket && currentUser) {
+        socket.emit('join_new_channels', currentUser._id);
+      }
+
       // Invalider la requête des canaux accessibles
+
       queryClient.invalidateQueries({ 
         queryKey: ['channels', 'accessible'] 
       });
