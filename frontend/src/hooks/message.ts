@@ -59,7 +59,7 @@ export function useSendMessage() {
     }) => {
       return MessageService.sendMessage(channelId, content, parentMessageId);
     },
-    onSuccess: (messages, variables) => {
+    onSuccess: (_, variables) => {
       // Invalider la requête après l'envoi d'un message
       queryClient.invalidateQueries({
         queryKey: [MESSAGE_QUERY_KEY, variables.channelId],

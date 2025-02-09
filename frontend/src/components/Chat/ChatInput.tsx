@@ -52,7 +52,7 @@ export function ChatInput({ onSendMessage, onTyping }: ChatInputProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 my-2 ml-2">
+    <form onSubmit={handleSubmit} className="p-4 ml-2 mb-1">
       <div className="flex items-center gap-2">
         <input
           type="text"

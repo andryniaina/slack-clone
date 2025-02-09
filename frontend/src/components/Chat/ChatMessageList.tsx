@@ -62,7 +62,7 @@ export function ChatMessageList({ messages, isLoading }: ChatMessageListProps) {
       <div ref={scrollContainerRef} className="flex-1 overflow-y-auto flex flex-col pr-4 [&::-webkit-scrollbar]:w-[8px] [&::-webkit-scrollbar-thumb]:bg-[#00000033] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent hover:[&::-webkit-scrollbar-thumb]:bg-[#00000055]">
         <div className="flex-1" />
         <div>
-          {sortedDates.map((date, dateIndex) => (
+          {sortedDates.map((date) => (
             <div key={date}>
               <div className="px-4 py-3">
                 <div className="relative">

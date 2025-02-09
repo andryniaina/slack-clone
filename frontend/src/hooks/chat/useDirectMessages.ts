@@ -4,11 +4,9 @@ import { Channel } from '../../data/dtos/channel';
 import { useUsers } from '../user';
 import { useDirectChannels } from '../channel';
 import { ChannelService } from '../../services/channel';
-import { useAuth } from '../../contexts/AuthContext';
 import { useLastMessages } from '../message/useLastMessages';
 
 export function useDirectMessages() {
-  const { user: currentUser } = useAuth();
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
 

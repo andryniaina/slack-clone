@@ -7,7 +7,6 @@ import {
     ArrowRight,
     MessageSquare,
     Search,
-    Settings,
     Bell,
     LogOut,
     Slack
@@ -50,7 +49,7 @@ export default function AuthenticatedLayout() {
                     {/* Home */}
                     <div className="w-full flex flex-col items-center">
                         <NavLink to="/app/dashboard" className="w-full flex flex-col items-center">
-                            <button className={getButtonClass('/app/dashboard')}>
+                            <button className={`${getButtonClass('/app/dashboard')} transition-transform duration-100 hover:scale-110`}>
                                 <Home size={20} />
                             </button>
                             <span className={`text-[11px] ${isActive('/app/dashboard') ? 'text-white' : 'text-white/70'} mt-0.5`}>Accueil</span>
@@ -60,7 +59,7 @@ export default function AuthenticatedLayout() {
                     {/* Messages */}
                     <div className="w-full flex flex-col items-center">
                         <NavLink to="/app/directs" className="w-full flex flex-col items-center">
-                            <button className={getButtonClass('/app/directs')}>
+                            <button className={`${getButtonClass('/app/directs')} transition-transform duration-100 hover:scale-110`}>
                                 <MessageSquare size={20} />
                             </button>
                             <span className={`text-[11px] ${isActive('/app/directs') ? 'text-white' : 'text-white/70'} mt-0.5 text-center leading-tight`}>Messages<br />directs</span>
@@ -70,7 +69,7 @@ export default function AuthenticatedLayout() {
                     {/* Activity */}
                     <div className="w-full flex flex-col items-center">
                         <NavLink to="/app/activity" className="w-full flex flex-col items-center">
-                            <button className={getButtonClass('/app/activity')}>
+                            <button className={`${getButtonClass('/app/activity')} transition-transform duration-100 hover:scale-110`}>
                                 <Bell size={20} />
                             </button>
                             <span className={`text-[11px] ${isActive('/app/activity') ? 'text-white' : 'text-white/70'} mt-0.5`}>Activité</span>
@@ -79,7 +78,7 @@ export default function AuthenticatedLayout() {
 
                     {/* More */}
                     <div className="w-full flex flex-col items-center">
-                        <button className="w-9 h-9 bg-[#rgb(69,17,70)] rounded-lg flex items-center justify-center text-white hover:bg-white/10">
+                        <button className="w-9 h-9 bg-[#rgb(69,17,70)] rounded-lg flex items-center justify-center text-white hover:bg-white/10 transition-transform duration-100 hover:scale-110">
                             <span className="text-lg">•••</span>
                         </button>
                         <span className="text-[11px] text-white/70 mt-0.5">Plus</span>
@@ -89,7 +88,7 @@ export default function AuthenticatedLayout() {
                 {/* Bottom Section */}
                 <div className="mt-4 w-full flex flex-col items-center space-y-3">
                     {/* Plus Button */}
-                    <button className="w-9 h-9 bg-[#542C56] rounded-full flex items-center justify-center text-white hover:bg-white/20">
+                    <button className="w-9 h-9 bg-[#542C56] rounded-full flex items-center justify-center text-white hover:bg-white/20 transition-transform duration-100 hover:scale-110">
                         <Plus size={20} />
                     </button>
                 </div>

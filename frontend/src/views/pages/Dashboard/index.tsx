@@ -74,12 +74,6 @@ export default function Dashboard() {
     handleChannelSelect(channel);
   };
 
-  const handleClearSelection = () => {
-    setSelectedUser(null);
-    setSelectedDirectChannel(null);
-    handleChannelSelect(null);
-  };
-
   return (
     <div className="flex h-full bg-[#3E0F3F]">
       {/* Left Sidebar */}

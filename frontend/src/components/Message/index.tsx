@@ -40,11 +40,13 @@ export function Message({ message, isFirstInGroup = true, isFirstOfDay = false }
               </span>
             </div>
           )}
-          <div className="text-[15px] text-[#1D1C1D] leading-[1.46668] break-words whitespace-pre-wrap">
-            {message.content}
-            {message.isEdited && (
-              <span className="text-[12px] text-[#616061] ml-[6px] font-normal select-none">(modifié)</span>
-            )}
+          <div className="text-[15px] text-[#1D1C1D] leading-[1.46668] break-words whitespace-pre-wrap overflow-hidden">
+            <span className="inline-block max-w-[calc(100%-32px)]">
+              {message.content}
+              {message.isEdited && (
+                <span className="text-[12px] text-[#616061] ml-[6px] font-normal select-none inline-block">(modifié)</span>
+              )}
+            </span>
           </div>
         </div>
       </div>
