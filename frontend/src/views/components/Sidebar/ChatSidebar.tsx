@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Plus } from 'lucide-react';
-import { SidebarSection } from '../views/Dashboard/SidebarSection';
-import { useCollapsibleState } from '../../hooks/ui/useCollapsibleState';
+import { SidebarSection } from '../Dashboard/SidebarSection';
+import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 
 interface ChatSidebarProps {
   title: string;

@@ -1,7 +1,7 @@
-import { Message as MessageType } from '../../data/dtos/message';
-import avatar from '../../assets/images/avatar.png';
+import { Message as MessageType } from '../../../data/dtos/message';
+import avatar from '../../../assets/images/avatar.png';
 import clsx from 'clsx';
-import { formatTime } from '../../utils/date';
+import { formatTime } from '../../../utils/date';
 
 interface MessageProps {
   message: MessageType;

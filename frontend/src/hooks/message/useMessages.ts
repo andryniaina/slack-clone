@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { MessageService } from '../services/message';
-import { Message } from '../data/dtos/message';
-import { useWebSocket } from '../contexts/WebSocketContext';
+import { MessageService } from '../../services/message';
+import { Message } from '../../data/dtos/message';
+import { useWebSocket } from '../../contexts/WebSocketContext';
 import { useEffect } from 'react';
 
 const MESSAGE_QUERY_KEY = 'messages';

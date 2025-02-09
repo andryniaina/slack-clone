@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { ChatContainer } from '../../../components/Chat/ChatContainer';
-import { SidebarChannelItem } from '../../../components/views/Dashboard/SidebarChannelItem';
-import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
-import { CreateChannelModal } from '../../../components/views/CreateChannelModal';
+import { ChatContainer } from '../../components/Chat/ChatContainer';
+import { SidebarChannelItem } from '../../components/Dashboard/SidebarChannelItem';
+import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
+import { CreateChannelModal } from '../../components/Dashboard/CreateChannelModal';
 import { useChat, useChannelSelection, useDirectMessages } from '../../../hooks/chat';
 import { X, MoreVertical, Plus } from 'lucide-react';
-import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
+import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
 import { Channel } from '../../../data/dtos/channel';

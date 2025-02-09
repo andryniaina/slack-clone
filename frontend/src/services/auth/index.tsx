@@ -1,6 +1,11 @@
 import api from '../../utils/network/api';
 import { LoginDto, RegisterDto, AuthResponse } from '../../data/dtos/auth';
-import { API_CONFIG } from '../../config/api';
+
+const AUTH_ENDPOINTS = {
+  LOGIN: '/auth/login',
+  REGISTER: '/auth/register',
+  LOGOUT: '/auth/logout'
+};
 
 class AuthError extends Error {
   constructor(message: string) {
@@ -12,10 +17,11 @@ class AuthError extends Error {
 export const AuthService = {
   async login(data: LoginDto): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>(API_CONFIG.AUTH.LOGIN, data);
+      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.LOGIN, data);
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
+
       return response.data;
     } catch (error: any) {
       if (error.response?.status === 401) {
@@ -30,9 +36,10 @@ export const AuthService = {
 
   async register(data: RegisterDto): Promise<AuthResponse> {
     try {
-      const response = await api.post<AuthResponse>(API_CONFIG.AUTH.REGISTER, data);
+      const response = await api.post<AuthResponse>(AUTH_ENDPOINTS.REGISTER, data);
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
+
       }
       return response.data;
     } catch (error: any) {
@@ -48,7 +55,7 @@ export const AuthService = {
 
   async logout(): Promise<void> {
     try {
-      await api.post(API_CONFIG.AUTH.LOGOUT);
+      await api.post(AUTH_ENDPOINTS.LOGOUT);
     } catch (error) {
       console.error('Logout error:', error);
     } finally {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Channel } from '../../data/dtos/channel';
 import { Message } from '../../data/dtos/message';
-import { useChannelMessages, useSendMessage } from '../message';
+import { useChannelMessages, useSendMessage } from '../message/useMessages';
 import { useWebSocket } from '../../contexts/WebSocketContext';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';

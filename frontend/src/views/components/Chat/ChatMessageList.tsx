@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { Message as MessageType } from '../../data/dtos/message';
+import { Message as MessageType } from '../../../data/dtos/message';
 import { Message } from '../Message';
 import { Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-import { formatDateHeader } from '../../utils/date';
+import { formatDateHeader } from '../../../utils/date';
 
 interface ChatMessageListProps {
   messages: MessageType[];

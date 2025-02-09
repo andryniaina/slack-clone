@@ -1,9 +1,10 @@
-import { User } from '../../../data/dtos/user';
-import { Message } from '../../../data/dtos/message';
+import { User } from '../../../../data/dtos/user';
+import { Message } from '../../../../data/dtos/message';
 import { format } from 'date-fns';
 import clsx from 'clsx';
-import avatar from '../../../assets/images/avatar.png';
-import { useAuth } from '../../../contexts/AuthContext';
+import avatar from '../../../../assets/images/avatar.png';
+import { useAuth } from '../../../../contexts/AuthContext';
+
 
 interface DirectMessageItemProps {
   user: User;

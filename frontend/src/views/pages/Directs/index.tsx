@@ -1,8 +1,8 @@
-import { ChatContainer } from '../../../components/Chat/ChatContainer';
-import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
+import { ChatContainer } from '../../components/Chat/ChatContainer';
+import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
 import { useChat, useDirectMessages } from '../../../hooks/chat';
 import { X, MoreVertical } from 'lucide-react';
-import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
+import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
 

@@ -1,9 +1,9 @@
-import { User } from '../../../data/dtos/user';
-import { Message } from '../../../data/dtos/message';
+import { User } from '../../../../data/dtos/user';
+import { Message } from '../../../../data/dtos/message';
 import { DirectMessageItem } from '../DirectMessageItem';
 import { Loader2 } from 'lucide-react';
-import { useAuth } from '../../../contexts/AuthContext';
-import { sortUsersWithCurrentUserLast } from '../../../utils/user';
+import { useAuth } from '../../../../contexts/AuthContext';
+import { sortUsersWithCurrentUserLast } from '../../../../utils/user';
 
 interface DirectMessagesListProps {
   users: User[];

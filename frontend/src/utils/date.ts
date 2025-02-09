@@ -1,5 +1,4 @@
 import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 
 export const formatDateHeader = (dateStr: string) => {
   const date = new Date(dateStr);

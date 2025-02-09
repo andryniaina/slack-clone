@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { Channel } from '../../data/dtos/channel';
+import { Channel } from '../../../data/dtos/channel';
 import { Hash, Users } from 'lucide-react';
-import { User } from '../../data/dtos/user';
-import avatar from '../../assets/images/avatar.png';
+import { User } from '../../../data/dtos/user';
+import avatar from '../../../assets/images/avatar.png';
 import clsx from 'clsx';
-import { useUsers } from '../../hooks/user';
+import { useUsers } from '../../../hooks/user';
 
 interface ChatHeaderProps {
   channel: Channel;

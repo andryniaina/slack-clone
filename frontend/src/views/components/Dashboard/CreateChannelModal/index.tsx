@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { X, Hash, ChevronLeft} from 'lucide-react';
-import { ChannelType } from '../../../data/dtos/channel';
-import { ChannelService } from '../../../services/channel';
+import { ChannelType } from '../../../../data/dtos/channel';
+import { ChannelService } from '../../../../services/channel';
 import { useQueryClient } from '@tanstack/react-query';
-import { useUsers } from '../../../hooks/user';
-import { User } from '../../../data/dtos/user';
+import { useUsers } from '../../../../hooks/user';
+import { User } from '../../../../data/dtos/user';
 import clsx from 'clsx';
-import avatar from '../../../assets/images/avatar.png';
-import { useAuth } from '../../../contexts/AuthContext';
+
+import avatar from '../../../../assets/images/avatar.png';
+import { useAuth } from '../../../../contexts/AuthContext';
+
 
 interface CreateChannelModalProps {
   isOpen: boolean;

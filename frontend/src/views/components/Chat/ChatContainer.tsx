@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
-import { Channel } from '../../data/dtos/channel';
-import { Message } from '../../data/dtos/message';
+import { Channel } from '../../../data/dtos/channel';
+import { Message } from '../../../data/dtos/message';
 import { ChatHeader } from './ChatHeader';
 import { ChatMessageList } from './ChatMessageList';
 import { ChatInput } from './ChatInput';
-import { useTypingStatus } from '../../hooks/message';
-import { User } from '../../data/dtos/user';
+import { useTypingStatus } from '../../../hooks/message/useMessages';
+import { User } from '../../../data/dtos/user';
 
 interface ChatContainerProps {
   channel: Channel | null;
