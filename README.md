@@ -173,7 +173,7 @@ Les messages directs permettent des conversations privées entre utilisateurs :
 L'application permet de gérer votre profil utilisateur via une interface intuitive :
 
 **Onglets de configuration :**
-- **Profil** : Modification des informations personnelles
+- **Profil** : Modification de l'username
 - **Sécurité** : Gestion du mot de passe
 
 **Modification du mot de passe :**
@@ -185,5 +185,3 @@ L'application permet de gérer votre profil utilisateur via une interface intuit
 **Actions :**
 - Bouton "Annuler" pour fermer sans sauvegarder
 - Bouton "Enregistrer les modifications" pour valider les changements
-
-> Note : Les modifications sont appliquées immédiatement après validation et seront reflétées dans toute l'application en temps réel.
