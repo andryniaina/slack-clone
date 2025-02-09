@@ -17,12 +17,6 @@ npm ci
 npm run dev
 ```
 
-### Docker
-```bash
-# Construction et lancement du conteneur (reconstruction si nécessaire)
-docker-compose up --build -d --remove-orphans --force-recreate
-```
-
 Une fois lancée, l'application est accessible à l'adresse : http://localhost:5073
 
 ## 🏗️ Architecture du projet

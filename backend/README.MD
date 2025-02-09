@@ -22,24 +22,15 @@ JWT_SECRET=dev-secret-key
 JWT_EXPIRES_IN=24h
 ```
 
-
 ### Installation et développement
 ```bash
 # Installation des dépendances
-npm ci
+npm install
 
 # Développement avec hot-reload
-npm run start:dev
+npm run start
 ```
 
-### Docker
-```bash
-# Modifier mongo url dans docker-compose.yml, l'ip devrait etre l'adresse ip de la machine ou d'un serveur distant par example 192.168.1.100
-DATABASE_URL=mongodb://192.168.1.100:27017/slack
-
-# Construction et lancement du conteneur (reconstruction si nécessaire)
-docker-compose up --build -d --remove-orphans --force-recreate
-```
 Une fois lancée, le serveur est accessible à l'adresse : http://localhost:3000
 
 ## 🏗️ Architecture du projet

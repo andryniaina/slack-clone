@@ -8,14 +8,23 @@ Une application de messagerie en temps réel inspirée de Slack, construite avec
 > - Node.js 18+ ([Télécharger](https://nodejs.org/))
 > - MongoDB ([Télécharger](https://www.mongodb.com/try/download/community) ou [Instructions d'installation](database/README.md))
 > - npm ou yarn
+> - Git ([Télécharger](https://git-scm.com/downloads))
 
-### Lancement en mode développement
+### Installation
+
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/andryniaina/slack-clone.git
+   cd slack-clone
+   ```
+
+### Lancement
 
 1. **Backend**
    ```bash
    cd backend
    npm install
-   npm run start:dev     # Lance le serveur sur http://localhost:3000
+   npm run start     # Lance le serveur sur http://localhost:3000
    ```
 
 2. **Frontend**
