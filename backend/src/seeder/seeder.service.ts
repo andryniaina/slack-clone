@@ -1,12 +1,12 @@
-import { Injectable, OnApplicationBootstrap, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './user/schemas/user.schema';
-import { Channel, ChannelDocument, ChannelType } from './channel/schemas/channel.schema';
+import { User, UserDocument } from '../user/schemas/user.schema';
+import { Channel, ChannelDocument, ChannelType } from '../channel/schemas/channel.schema';
 
 @Injectable()
-export class AppInitService implements OnApplicationBootstrap {
-  private readonly logger = new Logger(AppInitService.name);
+export class SeederService {
+  private readonly logger = new Logger(SeederService.name);
 
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
@@ -14,12 +14,11 @@ export class AppInitService implements OnApplicationBootstrap {
   ) {}
 
   /**
-   * Cette méthode est automatiquement appelée une fois que l'application est initialisée
-   * et que tous les modules sont chargés
+   * Initialise l'application avec les données de base
    */
-  async onApplicationBootstrap() {
+  async seed(): Promise<void> {
     try {
-      this.logger.log('Initialisation de l\'application...');
+      this.logger.log('Démarrage du seeding...');
       
       // Réinitialiser les états de connexion des utilisateurs
       await this.resetUserConnectionStates();
@@ -27,10 +26,10 @@ export class AppInitService implements OnApplicationBootstrap {
       // Créer les canaux par défaut
       await this.createDefaultChannels();
       
-      this.logger.log('Initialisation terminée avec succès');
+      this.logger.log('Seeding terminé avec succès');
     } catch (error) {
-      this.logger.error('Erreur lors de l\'initialisation de l\'application:', error);
-      // Ne pas faire crasher l'application, mais logger l'erreur
+      this.logger.error('Erreur lors du seeding:', error);
+      throw error;
     }
   }
 

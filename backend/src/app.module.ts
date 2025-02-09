@@ -5,9 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ChannelModule } from './channel/channel.module';
 import { MessageModule } from './message/message.module';
-import { AppInitService } from './app.init.service';
-import { User, UserSchema } from './user/schemas/user.schema';
-import { Channel, ChannelSchema } from './channel/schemas/channel.schema';
+import { SeederModule } from './seeder/seeder.module';
+import { AppBootstrapService } from './app.bootstrap.service';
 import { appConfig } from './config/configuration';
 
 @Module({
@@ -23,15 +22,12 @@ import { appConfig } from './config/configuration';
       }),
       inject: [ConfigService],
     }),
-    MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema },
-      { name: Channel.name, schema: ChannelSchema }
-    ]),
     AuthModule,
     UserModule,
     ChannelModule,
     MessageModule,
+    SeederModule,
   ],
-  providers: [AppInitService],
+  providers: [AppBootstrapService],
 })
 export class AppModule {}
