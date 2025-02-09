@@ -73,7 +73,6 @@ Pour créer un compte, remplissez le formulaire d'inscription avec :
 - **Nom d'utilisateur** : Votre pseudo qui sera visible par les autres utilisateurs
 - **Email** : Une adresse email valide (pas de vérification requise)
 - **Mot de passe** : Minimum 6 caractères
-- **Photo de profil** : Optionnelle, vous pourrez la modifier plus tard
 
 > Note : Pour simplifier le développement, nous n'avons pas implémenté de vérification d'email afin d'éviter la configuration d'un serveur SMTP.
 
