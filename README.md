@@ -5,7 +5,7 @@ Une application de messagerie en temps réel inspirée de Slack, construite avec
 ## Prérequis
 
 - Node.js 18+ ([Télécharger](https://nodejs.org/))
-- MongoDB ([Instructions d'installation](database/README.md))
+- MongoDB ([Télécharger](https://www.mongodb.com/try/download/community) ou [Instructions d'installation](database/README.md))
 - npm ou yarn
 
 ## Structure du Projet
@@ -20,17 +20,26 @@ slack/
 ## Installation
 
 1. **Base de données**
-   - Suivez les instructions dans le dossier [database/](database/README.md) pour installer MongoDB
+   - Si MongoDB est déjà installé sur votre machine, vous pouvez passer cette étape
+   - Sinon, suivez les instructions dans le dossier [database/](database/README.md) pour installer MongoDB
    - Vous pouvez utiliser Docker (recommandé) ou une installation locale
 
 2. **Backend**
    ```bash
    cd backend
    npm install
-   cp .env.example .env    # Configurez vos variables d'environnement
+   cp .env.example .env    # Optionnel : configurez vos variables d'environnement
    npm run start
    ```
    Le serveur démarrera sur `http://localhost:3000`
+
+   **Note sur la configuration :**
+   - Le fichier `.env` est optionnel
+   - Sans `.env`, l'application utilisera les valeurs par défaut :
+     - PORT=3000
+     - DATABASE_URL=mongodb://localhost:27017/slack
+     - JWT_SECRET=dev-secret-key
+     - JWT_EXPIRES_IN=24h
 
 3. **Frontend**
    ```bash
