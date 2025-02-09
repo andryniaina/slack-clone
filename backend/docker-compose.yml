@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  nestjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PORT=5000
+      - MONGODB_URI=mongodb://admin:secret@remoteserver/slack?authSource=admin
+    ports:
+      - "5024:5000"

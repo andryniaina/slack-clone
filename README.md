@@ -1,6 +1,6 @@
 # Slack Clone
 
-Une application de messagerie en temps réel inspirée de Slack, construite avec NestJS et React.
+Une application de messagerie en temps réel inspirée de Slack, construite avec React (Vite), Node.js (NestJS) et MongoDB.
 
 ## Prérequis
 
@@ -48,6 +48,11 @@ slack/
    npm run dev
    ```
    L'application sera accessible sur `http://localhost:5173`
+
+   **Configuration du Backend :**
+   - L'URL du backend peut être configurée dans `src/config/api.ts`
+   - Par défaut, elle pointe vers `http://localhost:3000`
+   - Modifiez `BASE_URL` si votre backend est hébergé sur une autre URL
 
 ## Développement
 
