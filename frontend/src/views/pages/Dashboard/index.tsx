@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ChatContainer } from '../../components/Chat/ChatContainer';
 import { SidebarChannelItem } from '../../components/Dashboard/SidebarChannelItem';
 import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
@@ -14,18 +15,25 @@ import { CHANNELS_QUERY_KEYS } from '../../../hooks/channel';
 import { useWebSocket } from '../../../contexts/WebSocketContext';
 import { useAuth } from '../../../contexts/AuthContext';
 
+interface LocationState {
+  chatType?: 'channel' | 'user';
+  chatData?: Channel | User;
+}
+
 export default function Dashboard() {
+  const location = useLocation();
   const { socket } = useWebSocket();
   const { user: currentUser } = useAuth();
   const queryClient = useQueryClient();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const hasHandledInitialNavigation = useRef(false);
 
   // État modal
   const [isCreateChannelModalOpen, setIsCreateChannelModalOpen] = useState(false);
 
   // État des sections réductibles
   const [collapsibleState, toggleSection] = useCollapsibleState('dashboard_sections', {
-    channels: false, // false = expanded by default
+    channels: false,
     directMessages: false
   });
 
@@ -46,6 +54,31 @@ export default function Dashboard() {
     setSelectedUser,
     setSelectedChannel: setSelectedDirectChannel
   } = useDirectMessages();
+
+  // Gestionnaire pour la navigation depuis la recherche
+  useEffect(() => {
+    const state = location.state as LocationState;
+    
+    if (state?.chatType && state?.chatData) {
+      // Réinitialiser la sélection actuelle
+      setSelectedUser(null);
+      setSelectedDirectChannel(null);
+      handleChannelSelect(null);
+
+      // Sélectionner le chat approprié
+      if (state.chatType === 'channel') {
+        handleChannelClick(state.chatData as Channel);
+      } else if (state.chatType === 'user') {
+        handleUserClick(state.chatData as User);
+      }
+
+      // Marquer que nous avons géré une navigation initiale
+      hasHandledInitialNavigation.current = true;
+
+      // Nettoyer l'état de navigation
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const handleUserClick = async (user: User) => {
     handleChannelSelect(null);
@@ -71,9 +104,14 @@ export default function Dashboard() {
     }
   };
 
-  // Sélection automatique par défaut selon la hiérarchie
+  // Sélection par défaut uniquement si aucune navigation n'a été traitée
   useEffect(() => {
     const selectDefault = async () => {
+      // Ne rien faire si une navigation a déjà été traitée
+      if (hasHandledInitialNavigation.current) {
+        return;
+      }
+
       // Ne rien faire si quelque chose est déjà sélectionné
       if (selectedChannel || selectedUser || selectedDirectChannel) {
         return;

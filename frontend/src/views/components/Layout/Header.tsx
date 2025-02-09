@@ -7,8 +7,10 @@ import { SearchService, SearchResult } from '../../../services/search';
 import avatar from '../../../assets/images/avatar.png';
 import { User } from '../../../data/dtos/user';
 import { Channel } from '../../../data/dtos/channel';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
+  const navigate = useNavigate();
   const { logout } = useAuth();
   const { canGoBack, canGoForward, goBack, goForward } = useAppNavigation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,6 +56,21 @@ export function Header() {
     }
   };
 
+  const handleResultClick = (result: SearchResult) => {
+    // Réinitialiser la recherche
+    setSearchQuery('');
+    setSearchResults([]);
+
+    console.log("result", result);
+    // Rediriger vers le Dashboard avec les données appropriées
+    navigate('/app/dashboard', {
+      state: {
+        chatType: result.type,
+        chatData: result.item
+      }
+    });
+  };
+
   return (
     <header className="h-11 bg-[#431343] flex items-center justify-center px-4 gap-4 relative">
       <div className="flex items-center gap-3">
@@ -96,12 +113,13 @@ export function Header() {
                   {searchResults.map((result, index) => (
                     <div
                       key={`${result.type}-${index}`}
-                      className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center gap-3"
+                      className="px-4 py-2 hover:bg-[#431343]/10 cursor-pointer flex items-center gap-3 transition-colors duration-150 group"
+                      onClick={() => handleResultClick(result)}
                     >
                       {result.type === 'channel' ? (
                         <>
-                          <Hash className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                          <span className="text-gray-900">{(result.item as Channel).name}</span>
+                          <Hash className="w-5 h-5 text-gray-400 flex-shrink-0 group-hover:text-[#431343]" />
+                          <span className="text-gray-900 group-hover:text-[#431343]">{(result.item as Channel).name}</span>
                         </>
                       ) : (
                         <>
@@ -111,11 +129,11 @@ export function Header() {
                             className="w-6 h-6 rounded object-cover flex-shrink-0"
                           />
                           <div className="flex flex-col">
-                            <span className="text-gray-900">
+                            <span className="text-gray-900 group-hover:text-[#431343]">
                               {(result.item as User).username || (result.item as User).email}
                             </span>
                             {(result.item as User).username && (
-                              <span className="text-xs text-gray-500">
+                              <span className="text-xs text-gray-500 group-hover:text-[#431343]/70">
                                 {(result.item as User).email}
                               </span>
                             )}
