@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Channel } from '../../../data/dtos/channel';
+import { Channel, ChannelType } from '../../../data/dtos/channel';
 import { Hash, Users } from 'lucide-react';
 import { User } from '../../../data/dtos/user';
 import avatar from '../../../assets/images/avatar.png';
@@ -19,6 +19,11 @@ export function ChatHeader({ channel, rightContent, selectedUser }: ChatHeaderPr
   // Get the latest user data from the users list
   const currentUser = selectedUser ? users.find(u => u._id === selectedUser._id) : null;
   const userToDisplay = currentUser || selectedUser;
+
+  // Calculer le nombre de membres (déduire l'utilisateur système pour les canaux publics)
+  const memberCount = channel.type === ChannelType.PUBLIC 
+    ? channel.members.length - 1 // Déduire l'utilisateur système
+    : channel.members.length;
 
   return (
     <div className="h-14 border-b border-gray-200 flex items-center justify-between px-4 flex-shrink-0">
@@ -64,7 +69,7 @@ export function ChatHeader({ channel, rightContent, selectedUser }: ChatHeaderPr
         {!isDirectChannel && (
           <div className="flex items-center text-gray-500">
             <Users className="w-4 h-4 mr-1" />
-            <span className="text-sm">{channel.members.length}</span>
+            <span className="text-sm">{memberCount}</span>
           </div>
         )}
         {rightContent}

@@ -115,16 +115,13 @@ export default function AuthenticatedLayout() {
                         <button className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white">
                             <ArrowRight size={18} />
                         </button>
-                        <button className="w-7 h-7 flex items-center justify-center text-white/70 hover:text-white">
-                            <Clock size={18} />
-                        </button>
                     </div>
 
                     {/* Search Bar */}
                     <div className="flex-1 w-[50vw] relative">
                         <input
                             type="text"
-                            placeholder="Rechercher dans Koto SA"
+                            placeholder="Rechercher un canal ou un utilisateur"
                             className="w-full h-7 bg-[#5B315E] text-white placeholder-white text-sm px-8 rounded border border-white/30 focus:outline-none focus:border-white/60"
                         />
                         <Search size={14} className="absolute left-2.5 top-1/2 transform -translate-y-1/2 text-white/60" />

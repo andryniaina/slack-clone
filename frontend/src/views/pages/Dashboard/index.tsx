@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChatContainer } from '../../components/Chat/ChatContainer';
 import { SidebarChannelItem } from '../../components/Dashboard/SidebarChannelItem';
 import { SidebarUserItem } from '../../components/Dashboard/SidebarUserItem';
@@ -38,6 +38,55 @@ export default function Dashboard() {
     setSelectedChannel: setSelectedDirectChannel
   } = useDirectMessages();
 
+  const handleUserClick = async (user: User) => {
+    handleChannelSelect(null);
+    await handleUserSelect(user);
+  };
+
+  const handleChannelClick = (channel: Channel) => {
+    setSelectedUser(null);
+    setSelectedDirectChannel(null);
+    handleChannelSelect(channel);
+  };
+
+  // Sélection automatique par défaut selon la hiérarchie
+  useEffect(() => {
+    const selectDefault = async () => {
+      // Ne rien faire si quelque chose est déjà sélectionné
+      if (selectedChannel || selectedUser || selectedDirectChannel) {
+        return;
+      }
+
+      // Attendre que les données soient chargées
+      if (isLoadingChannels || isLoadingUsers) {
+        return;
+      }
+
+      // Priorité 1: Sélectionner le premier canal si disponible
+      if (channels.length > 0) {
+        handleChannelClick(channels[0]);
+        return;
+      }
+
+      // Priorité 2: Sélectionner le premier utilisateur si disponible
+      if (users?.length > 0) {
+        await handleUserClick(users[0]);
+      }
+    };
+
+    selectDefault();
+  }, [
+    channels,
+    users,
+    isLoadingChannels,
+    isLoadingUsers,
+    selectedChannel,
+    selectedUser,
+    selectedDirectChannel,
+    handleChannelClick,
+    handleUserClick
+  ]);
+
   const {
     messages,
     isLoadingMessages,
@@ -62,17 +111,6 @@ export default function Dashboard() {
       </button>
     </div>
   );
-
-  const handleUserClick = async (user: User) => {
-    handleChannelSelect(null);
-    await handleUserSelect(user);
-  };
-
-  const handleChannelClick = (channel: Channel) => {
-    setSelectedUser(null);
-    setSelectedDirectChannel(null);
-    handleChannelSelect(channel);
-  };
 
   return (
     <div className="flex h-full bg-[#3E0F3F]">

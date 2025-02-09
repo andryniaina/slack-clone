@@ -5,6 +5,7 @@ import { X, MoreVertical } from 'lucide-react';
 import { SidebarSection } from '../../components/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
+import { useEffect } from 'react';
 
 export default function Directs() {
   // État des sections réductibles
@@ -22,6 +23,13 @@ export default function Directs() {
     setSelectedUser,
     setSelectedChannel
   } = useDirectMessages();
+
+  // Sélectionner automatiquement le premier utilisateur lorsque la liste est chargée
+  useEffect(() => {
+    if (!isLoadingUsers && users?.length > 0 && !selectedUser) {
+      handleUserSelect(users[0]);
+    }
+  }, [users, isLoadingUsers, selectedUser, handleUserSelect]);
 
   const {
     messages,
