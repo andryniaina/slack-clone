@@ -92,6 +92,7 @@ Une fois connecté, vous accédez au dashboard qui comprend :
 **Navigation principale :**
 - **Barre de recherche** : En haut, permet de rechercher des utilisateurs ou des canaux
 - **Bouton de déconnexion** : Pour se déconnecter de l'application
+- **Sidebar de navigation** : Pour accéder aux différentes pages
 
 **Barre latérale :**
 - **Section CANAUX :**
@@ -110,7 +111,50 @@ Une fois connecté, vous accédez au dashboard qui comprend :
 - Zone de saisie en bas pour envoyer des messages
 - Description du canal en haut (ex: "Canal général pour toute l'entreprise")
 
-### 4. Messages Directs
+### 4. Création d'un Canal
+![Création de canal](docs/screenshots/CreateCanal.png)
+
+Pour créer un nouveau canal, cliquez sur le bouton "+" dans la section CANAUX. Le formulaire de création comprend :
+
+**Informations requises :**
+- **Nom du canal** : Préfixé automatiquement par "#", choisissez un nom simple et clair
+- **Description** (facultatif) : Donnez aux membres une idée claire de l'objectif du canal
+
+**Options de visibilité :**
+- **Public** : Accessible à tous les utilisateurs de l'entreprise
+- **Privé** : Uniquement sur invitation
+  - Si vous choisissez "Privé", vous devrez sélectionner les membres autorisés à rejoindre le canal
+  - Les canaux privés ne peuvent être rejoints ou consultés que sur invitation
+
+> Note : Le canal "#tous" est public par défaut et ne peut pas être rendu privé car il sert de canal général pour l'entreprise.
+
+### 5. Communication dans les Canaux
+![Canal de discussion](docs/screenshots/CanalChat.png)
+
+Les canaux permettent des discussions de groupe en temps réel :
+
+**Fonctionnalités temps réel :**
+- **Messages instantanés** : Les messages apparaissent immédiatement pour tous les membres connectés
+- **Indicateurs de présence** : 
+  - Statut en ligne/hors ligne mis à jour en temps réel
+  - Nombre de membres actifs affiché en haut du canal
+  - Liste des membres mise à jour automatiquement
+
+**Interface du canal :**
+- **En-tête :**
+  - Nom et description du canal
+  - Nombre de participants
+- **Zone de messages :**
+  - Messages organisés chronologiquement avec date et heure
+  - Séparation par dates (ex: "Dimanche 9 Février", "Lundi 10 Février")
+  - Avatar et nom de l'expéditeur pour chaque message
+- **Zone de saisie :**
+  - Champ de texte avec placeholder "Écrivez votre message ici..."
+  - Envoi par touche Entrée ou bouton d'envoi
+
+> Note : Toutes les interactions (nouveaux messages, changements de statut, etc.) sont synchronisées instantanément entre tous les membres du canal grâce à WebSocket.
+
+### 6. Messages Directs
 ![Messages directs](docs/screenshots/DirectMessage.png)
 
 Les messages directs permettent des conversations privées entre utilisateurs :
@@ -123,3 +167,24 @@ Les messages directs permettent des conversations privées entre utilisateurs :
   - Zone de saisie en bas avec envoi par la touche Entrée ou le bouton d'envoi
   - Messages affichés avec l'avatar et le nom de l'expéditeur
   - Indication de la date des messages (ex: "Dimanche 9 Février")
+
+### 7. Gestion du Profil
+![Édition du profil](docs/screenshots/EditProfile.png)
+
+L'application permet de gérer votre profil utilisateur via une interface intuitive :
+
+**Onglets de configuration :**
+- **Profil** : Modification des informations personnelles
+- **Sécurité** : Gestion du mot de passe
+
+**Modification du mot de passe :**
+- Saisissez votre mot de passe actuel
+- Entrez votre nouveau mot de passe
+- Confirmez le nouveau mot de passe
+- Les champs sont masqués par défaut mais peuvent être affichés via l'icône "œil"
+
+**Actions :**
+- Bouton "Annuler" pour fermer sans sauvegarder
+- Bouton "Enregistrer les modifications" pour valider les changements
+
+> Note : Les modifications sont appliquées immédiatement après validation et seront reflétées dans toute l'application en temps réel.
