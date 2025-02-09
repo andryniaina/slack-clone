@@ -175,7 +175,7 @@ export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps)
                     />
                     <span className="ml-3">
                       <span className="block text-sm font-medium text-gray-900">
-                        Public - tous les utilisateurs de Koto SA
+                        Public - tous les utilisateurs
                       </span>
                     </span>
                   </label>
