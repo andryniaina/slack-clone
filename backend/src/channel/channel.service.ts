@@ -9,43 +9,47 @@ import { CreateChannelDto, UpdateChannelDto, AddMembersDto, RemoveMembersDto, Cr
 export class ChannelService {
   constructor(
     @InjectModel(Channel.name) private channelModel: Model<ChannelDocument>,
+    @InjectModel(User.name) private userModel: Model<User>,
   ) {}
 
   async create(createChannelDto: CreateChannelDto, user: User): Promise<PopulatedChannel> {
-    const { name, type, description, members = [] } = createChannelDto;
+    try {
+      const { name, type, description, members = [] } = createChannelDto;
 
-    // Vérifier si un canal avec ce nom existe déjà
-    const existingChannel = await this.channelModel.findOne({ name, type });
-    if (existingChannel) {
-      throw new ConflictException('Un canal avec ce nom existe déjà');
+      // Pour les canaux publics, ajouter tous les utilisateurs comme membres
+      let allMembers = [...members];
+      if (type === ChannelType.PUBLIC) {
+        const allUsers = await this.userModel.find({});
+        const userIds = allUsers.map(user => user._id.toString());
+        allMembers = [...new Set([...allMembers, ...userIds])];
+      }
+
+      // Convertir tous les IDs en ObjectId
+      const memberIds = allMembers.map(id => new Types.ObjectId(id));
+
+      const channel = new this.channelModel({
+        name,
+        type,
+        description,
+        createdBy: user._id,
+        members: memberIds,
+        admins: [user._id],
+      });
+
+      await channel.save();
+
+      return await this.channelModel
+        .findById(channel._id)
+        .populate('createdBy', 'email username avatar')
+        .populate('members', 'email username avatar isOnline')
+        .populate('admins', 'email username avatar')
+        .exec() as unknown as PopulatedChannel;
+    } catch (error) {
+      if (error.code === 11000) {
+        throw new ConflictException('Un canal avec ce nom existe déjà');
+      }
+      throw error;
     }
-
-    // Convertir tous les IDs en ObjectId
-    const memberIds = [...new Set([user._id.toString(), ...members])].map(id => new Types.ObjectId(id));
-
-    // Créer le canal
-    const channel = new this.channelModel({
-      name,
-      type,
-      description,
-      createdBy: user._id,
-      members: memberIds,
-      admins: [user._id],
-    });
-
-    await channel.save();
-
-    const savedChannel = await this.channelModel
-      .findById(channel._id)
-      .populate('members', 'email username avatar isOnline')
-      .populate('createdBy', 'email username')
-      .exec();
-
-    if (!savedChannel) {
-      throw new NotFoundException('Canal non trouvé');
-    }
-
-    return savedChannel as unknown as PopulatedChannel;
   }
 
   async createDirectMessage(createDirectMessageDto: CreateDirectMessageDto, user: User): Promise<PopulatedChannel> {
@@ -158,7 +162,6 @@ export class ChannelService {
     const channel = await this.channelModel
       .findOne({ _id: id, members: user._id })
       .populate('members', 'email username avatar isOnline')
-      .populate('createdBy', 'email username')
       .exec();
 
     if (!channel) {
@@ -324,6 +327,7 @@ export class ChannelService {
    * (canaux publics ou canaux privés dont l'utilisateur est membre)
    */
   async findAccessibleChannels(user: User): Promise<PopulatedChannel[]> {
+    console.log("Here");
     const channels = await this.channelModel
       .find({
         $or: [
@@ -337,7 +341,6 @@ export class ChannelService {
         type: { $ne: ChannelType.DIRECT }
       })
       .populate('members', 'email username avatar isOnline')
-      .populate('createdBy', 'email username')
       .sort({ lastMessageAt: -1 })
       .exec();
 

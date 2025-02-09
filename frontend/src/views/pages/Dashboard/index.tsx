@@ -27,6 +27,8 @@ import {
   import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
   import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
   import { sortUsersWithCurrentUserLast } from '../../../utils/user';
+  import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
+  import { SidebarChannelItem } from '../../../components/views/Dashboard/SidebarChannelItem';
   
   export default function Directs() {
     const { user: currentUser } = useAuth();
@@ -41,6 +43,12 @@ import {
     const { setTyping } = useTypingStatus(selectedChannel?._id || '');
     const queryClient = useQueryClient();
     const [isCreateChannelModalOpen, setIsCreateChannelModalOpen] = useState(false);
+  
+    // État des sections réductibles
+    const [collapsibleState, toggleSection] = useCollapsibleState('dashboard_sections', {
+      channels: false, // false = expanded by default
+      directMessages: false
+    });
   
     // Handle typing status
     useEffect(() => {
@@ -222,50 +230,59 @@ import {
         <div className="w-[260px] bg-[#512654] flex flex-col flex-shrink-0 rounded-lg">
           {/* Sections */}
           <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
-            {/* Channels Section */}
-            <div>
-              <div className="flex items-center justify-between px-2 py-1 text-white/70 hover:text-white cursor-pointer">
-                <div className="flex items-center">
-                  <ChevronDown size={16} className="mr-1" />
-                  <span className="text-sm font-medium">Canaux</span>
+            {/* Canaux Section */}
+            <SidebarSection 
+              title="Canaux" 
+              isCollapsible={true}
+              isCollapsed={collapsibleState.channels}
+              onToggle={() => toggleSection('channels')}
+            >
+              {isChannelsLoading ? (
+                <div className="flex items-center justify-center py-4 text-white/70">
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  <span className="text-sm">Chargement...</span>
                 </div>
-              </div>
-              <div className="mt-1 space-y-0.5">
-                {isChannelsLoading ? (
-                  <div className="flex items-center justify-center py-4 text-white/70">
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    <span className="text-sm">Chargement...</span>
-                  </div>
-                ) : channels.length === 0 ? (
+              ) : !channels.length ? (
+                <>
                   <div className="px-2 py-4 text-white/70 text-sm text-center">
                     Aucun canal disponible
                   </div>
-                ) : (
-                  channels.map((channel) => (
-                    <button
+                  <button 
+                    onClick={() => setIsCreateChannelModalOpen(true)}
+                    className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded"
+                  >
+                    <Plus size={16} className="mr-2" />
+                    Créer un canal
+                  </button>
+                </>
+              ) : (
+                <>
+                  {channels.map((channel) => (
+                    <SidebarChannelItem
                       key={channel._id}
+                      channel={channel}
+                      isSelected={selectedChannel?._id === channel._id}
                       onClick={() => setSelectedChannel(channel)}
-                      className={`w-full ${
-                        selectedChannel?._id === channel._id ? 'bg-[#1164A3] text-white' : 'text-white/70 hover:bg-[#350D36]'
-                      } px-2 py-1 text-sm flex items-center rounded`}
-                    >
-                      <Hash size={16} className="mr-2" />
-                      {channel.name}
-                    </button>
-                  ))
-                )}
-                <button 
-                  onClick={() => setIsCreateChannelModalOpen(true)}
-                  className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded"
-                >
-                  <Plus size={16} className="mr-2" />
-                  Créer un canal
-                </button>
-              </div>
-            </div>
+                    />
+                  ))}
+                  <button 
+                    onClick={() => setIsCreateChannelModalOpen(true)}
+                    className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded"
+                  >
+                    <Plus size={16} className="mr-2" />
+                    Créer un canal
+                  </button>
+                </>
+              )}
+            </SidebarSection>
 
             {/* Messages directs Section */}
-            <SidebarSection title="Messages directs">
+            <SidebarSection 
+              title="Messages directs"
+              isCollapsible={true}
+              isCollapsed={collapsibleState.directMessages}
+              onToggle={() => toggleSection('directMessages')}
+            >
               {usersLoading ? (
                 <div className="flex items-center justify-center py-4 text-white/70">
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -285,16 +302,6 @@ import {
                       onClick={() => handleUserClick(user)}
                     />
                   ))}
-                  <button
-                    onClick={() => {
-                      setSelectedUser(null);
-                      setSelectedChannel(null);
-                    }}
-                    className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1.5 text-sm flex items-center rounded"
-                  >
-                    <Plus size={16} className="mr-2" />
-                    Ajouter des collègues
-                  </button>
                 </>
               )}
             </SidebarSection>

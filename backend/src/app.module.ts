@@ -6,11 +6,15 @@ import { ChannelModule } from './channel/channel.module';
 import { MessageModule } from './message/message.module';
 import { AppInitService } from './app.init.service';
 import { User, UserSchema } from './user/schemas/user.schema';
+import { Channel, ChannelSchema } from './channel/schemas/channel.schema';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/slack'),
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([
+      { name: User.name, schema: UserSchema },
+      { name: Channel.name, schema: ChannelSchema }
+    ]),
     AuthModule,
     UserModule,
     ChannelModule,

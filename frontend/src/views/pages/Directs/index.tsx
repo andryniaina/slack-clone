@@ -34,6 +34,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
 import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
 import { sortUsersWithCurrentUserLast } from '../../../utils/user';
+import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 
 export default function Directs() {
   const { user: currentUser } = useAuth();
@@ -48,6 +49,11 @@ export default function Directs() {
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { setTyping } = useTypingStatus(selectedChannel?._id || '');
   const { data: lastMessages } = useLastMessages(channels);
+
+  // État des sections réductibles
+  const [collapsibleState, toggleSection] = useCollapsibleState('directs_sections', {
+    directMessages: false // false = expanded by default
+  });
 
   useEffect(() => {
     const initializeChannels = async () => {
@@ -205,11 +211,6 @@ export default function Directs() {
     }
   };
 
-  const handleAddColleagues = () => {
-    // TODO: Implémenter l'ajout de collègues
-    console.log('Ajouter des collègues');
-  };
-
   return (
     <div className="flex h-full bg-[#3E0F3F]">
       {/* Left Sidebar */}
@@ -217,7 +218,12 @@ export default function Directs() {
         {/* Sections */}
         <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
           {/* Messages directs Section */}
-          <SidebarSection title="Messages directs">
+          <SidebarSection 
+            title="Messages directs"
+            isCollapsible={true}
+            isCollapsed={collapsibleState.directMessages}
+            onToggle={() => toggleSection('directMessages')}
+          >
             {usersLoading ? (
               <div className="flex items-center justify-center py-4 text-white/70">
                 <Loader2 className="w-4 h-4 animate-spin mr-2" />
@@ -237,13 +243,6 @@ export default function Directs() {
                     onClick={() => handleUserSelect(user)}
                   />
                 ))}
-                <button
-                  onClick={handleAddColleagues}
-                  className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1.5 text-sm flex items-center rounded"
-                >
-                  <Plus size={16} className="mr-2" />
-                  Ajouter des collègues
-                </button>
               </>
             )}
           </SidebarSection>

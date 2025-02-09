@@ -2,6 +2,11 @@ import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { LoginDto, RegisterDto } from '../user/dto/auth.dto';
+import { ChannelService } from '../channel/channel.service';
+import { ChannelType } from '../channel/schemas/channel.schema';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Channel, ChannelDocument } from '../channel/schemas/channel.schema';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -9,11 +14,18 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    @InjectModel(Channel.name) private channelModel: Model<ChannelDocument>,
   ) {}
 
   async register(registerDto: RegisterDto) {
     try {
       const user = await this.userService.create(registerDto);
+
+      await this.channelModel.updateMany(
+        { type: ChannelType.PUBLIC },
+        { $addToSet: { members: user._id } }
+      );
+
       const token = this.generateToken(user._id.toString());
       return { token };
     } catch (error) {

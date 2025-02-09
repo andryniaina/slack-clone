@@ -47,23 +47,6 @@ export function DirectMessagesList({
 
   return (
     <div>
-      {/* Empty State Section */}
-      <div className="px-4 py-3 bg-[#512654] mb-4">
-        <div className="flex items-start">
-          <div className="text-xl mr-2">👋</div>
-          <div>
-            <p className="text-white text-sm font-medium mb-1">
-              Personne ne manque à l'appel ? Ajoutez votre équipe et lancez la conversation.
-            </p>
-            <button
-              onClick={onAddColleaguesClick}
-              className="bg-white text-[#431343] text-sm font-medium px-4 py-1.5 rounded hover:bg-white/90"
-            >
-              Ajouter des collègues
-            </button>
-          </div>
-        </div>
-      </div>
 
       {/* Messages List */}
       <div className="mt-1 space-y-0.5">

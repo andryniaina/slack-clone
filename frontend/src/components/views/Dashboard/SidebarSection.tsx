@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import clsx from 'clsx';
 
 interface SidebarSectionProps {
@@ -14,7 +14,7 @@ interface SidebarSectionProps {
 export function SidebarSection({
   title,
   children,
-  isCollapsible = true,
+  isCollapsible = false,
   isCollapsed = false,
   onToggle,
   className
@@ -22,24 +22,21 @@ export function SidebarSection({
   return (
     <div className={clsx("py-1", className)}>
       {/* Header */}
-      <button
+      <div 
+        className={`flex items-center justify-between px-2 py-1 text-white/70 hover:text-white ${isCollapsible ? 'cursor-pointer' : ''}`}
         onClick={isCollapsible ? onToggle : undefined}
-        className={clsx(
-          "w-full px-2 py-1 flex items-center text-white/70 hover:text-white",
-          isCollapsible && "cursor-pointer"
-        )}
       >
-        {isCollapsible && (
-          <ChevronDown
-            size={16}
-            className={clsx(
-              "mr-1 transition-transform",
-              isCollapsed && "transform rotate-180"
-            )}
-          />
-        )}
-        <span className="text-sm font-medium">{title}</span>
-      </button>
+        <div className="flex items-center">
+          {isCollapsible && (
+            isCollapsed ? (
+              <ChevronRight size={16} className="mr-1" />
+            ) : (
+              <ChevronDown size={16} className="mr-1" />
+            )
+          )}
+          <span className="text-sm font-medium">{title}</span>
+        </div>
+      </div>
 
       {/* Content */}
       {!isCollapsed && (
