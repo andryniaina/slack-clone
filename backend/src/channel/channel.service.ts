@@ -87,8 +87,6 @@ export class ChannelService {
       };
     }
 
-    console.log('Query:', JSON.stringify(query, null, 2));
-
     // Vérifier si un canal de messages directs existe déjà
     const existingDM = await this.channelModel
       .findOne(query)
@@ -327,7 +325,6 @@ export class ChannelService {
    * (canaux publics ou canaux privés dont l'utilisateur est membre)
    */
   async findAccessibleChannels(user: User): Promise<PopulatedChannel[]> {
-    console.log("Here");
     const channels = await this.channelModel
       .find({
         $or: [

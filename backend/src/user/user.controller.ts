@@ -24,7 +24,6 @@ export class UserController {
    */
   @Patch('profile/username')
   async updateUsername(@Request() req, @Body() updateUsernameDto: UpdateUsernameDto) {
-    console.log("updateUsernameDto", updateUsernameDto);
     // Vérifier si le nom d'utilisateur existe déjà
     const existingUser = await this.userService.findByUsername(updateUsernameDto.username);
     if (existingUser && existingUser._id.toString() !== req.user._id.toString()) {
@@ -38,8 +37,6 @@ export class UserController {
   @Patch('profile/password')
   async updatePassword(@Request() req, @Body() updatePasswordDto: UpdatePasswordDto) {
     const { currentPassword, newPassword } = updatePasswordDto;
-
-    console.log("updatePasswordDto", updatePasswordDto);
 
     // Récupérer l'utilisateur avec son mot de passe actuel
     const user = await this.userService.findById(req.user._id);

@@ -110,17 +110,6 @@ export function useAppNavigation() {
     });
   }, [navigate]);
 
-  // Pour le débogage
-  useEffect(() => {
-    console.log('État de la navigation:', {
-      currentPath: location.pathname,
-      history: state.history,
-      currentIndex: state.currentIndex,
-      canGoBack: state.canGoBack,
-      canGoForward: state.canGoForward,
-    });
-  }, [state, location.pathname]);
-
   return {
     canGoBack: state.canGoBack,
     canGoForward: state.canGoForward,

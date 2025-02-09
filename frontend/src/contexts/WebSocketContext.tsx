@@ -43,7 +43,6 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
         // Gestionnaires d'événements de connexion
         socket.on('connect', () => {
-          console.log('Socket connecté, envoi de l\'ID utilisateur...');
           reconnectAttempts.current = 0;
           socket.emit('connect_user', user._id);
         });
@@ -59,12 +58,10 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         });
 
         socket.on('connect_confirmed', () => {
-          console.log('Connexion utilisateur confirmée');
           setIsConnected(true);
         });
 
         socket.on('disconnect', (reason) => {
-          console.log('WebSocket déconnecté:', reason);
           setIsConnected(false);
           if (reason === 'io server disconnect' || reason === 'io client disconnect') {
             // Ne pas tenter de se reconnecter si la déconnexion est volontaire
@@ -99,7 +96,6 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
       }
 
       reconnectAttempts.current += 1;
-      console.log(`Tentative de reconnexion ${reconnectAttempts.current}/${maxReconnectAttempts}...`);
 
       // Attendre avant de tenter une reconnexion
       reconnectTimer = setTimeout(() => {

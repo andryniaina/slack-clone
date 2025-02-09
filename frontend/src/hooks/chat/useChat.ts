@@ -26,7 +26,6 @@ export function useChat(selectedChannel: Channel | null) {
     if (!socket || !selectedChannel) return;
 
     const handleNewMessage = (message: Message) => {
-      console.log('New message in useChat:', message);
       if (message.channel === selectedChannel._id) {
         // Invalider la requête pour déclencher un nouveau fetch
         queryClient.invalidateQueries({

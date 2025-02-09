@@ -15,7 +15,6 @@ export const UserService = {
   },
   async getAllUsers(): Promise<User[]> {
     const response = await api.get<User[]>(USER_ENDPOINTS.ALL);
-    console.log("response", response.data);
     return response.data;
   },
   /**

@@ -34,7 +34,6 @@ export function useChannelMessages(channelId: string | undefined) {
     if (!socket || !channelId) return;
 
     const handleNewMessage = (message: Message) => {
-      console.log('message', message);
       if (message.channel === channelId) {
         // Invalider la requête pour déclencher un nouveau fetch
         queryClient.invalidateQueries({

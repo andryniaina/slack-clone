@@ -245,11 +245,8 @@ export class MessageService {
     user: User
   ): Promise<PopulatedMessage[]> {
     // Vérifier l'accès au canal
-    console.log('channelId', channelId);
     await this.channelService.findOne(channelId, user);
 
-
-    console.log('channelId', channelId);
     // Construire la requête
     const query: any = { channel: channelId };
     

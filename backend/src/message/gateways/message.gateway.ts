@@ -123,8 +123,6 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
         message: 'Nouveaux canaux rejoints avec succès',
         channelCount: channels.length
       });
-
-      console.log(`User ${user.email} joined ${channels.length} channels`);
     } catch (error) {
       console.error('Error joining new channels:', error);
       client.emit('error', { message: 'Erreur lors de la connexion aux nouveaux canaux' });
