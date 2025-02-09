@@ -1,11 +1,9 @@
 version: '3.8'
 
 services:
-  frontend:
+  react-vite-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: slack-frontend
     ports:
-      - "5025:80"
-    restart: unless-stopped
+      - "5073:80"

@@ -19,17 +19,15 @@ npm run dev
 
 ### Docker
 ```bash
-# Construction de l'image
-docker build -t slack-frontend .
-
-# Lancement du conteneur
-docker-compose up -d
+# Construction et lancement du conteneur (reconstruction si nécessaire)
+docker-compose up --build -d --remove-orphans --force-recreate
 ```
+
+Une fois lancée, l'application est accessible à l'adresse : http://localhost:5073
 
 ## 🏗️ Architecture du projet
 
-```
-src/
+```src/
 ├── assets/         # Ressources statiques (images, fonts)
 ├── config/         # Configuration de l'application
 ├── contexts/       # Contextes React (auth, websocket)

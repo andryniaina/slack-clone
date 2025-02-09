@@ -2,13 +2,59 @@
 
 Une application de messagerie en temps réel inspirée de Slack, construite avec React (Vite), Node.js (NestJS) et MongoDB.
 
-## Prérequis
+## 🚀 Démarrage rapide
 
-- Node.js 18+ ([Télécharger](https://nodejs.org/))
-- MongoDB ([Télécharger](https://www.mongodb.com/try/download/community) ou [Instructions d'installation](database/README.md))
-- npm ou yarn
+> **Prérequis** :
+> - Node.js 18+ ([Télécharger](https://nodejs.org/))
+> - MongoDB ([Télécharger](https://www.mongodb.com/try/download/community) ou [Instructions d'installation](database/README.md))
+> - npm ou yarn
 
-## Structure du Projet
+### Lancement en mode développement
+
+1. **Backend**
+   ```bash
+   cd backend
+   npm install
+   npm run start:dev     # Lance le serveur sur http://localhost:3000
+   ```
+
+2. **Frontend**
+   ```bash
+   cd frontend
+   npm install
+   npm run dev          # Lance l'application sur http://localhost:5173
+   ```
+
+Ces commandes utiliseront les configurations par défaut :
+- Backend : `http://localhost:3000` avec MongoDB sur `mongodb://localhost:27017/slack`
+- Frontend : `http://localhost:5173` connecté au backend par défaut
+
+## ⚙️ Configuration détaillée
+
+### Backend
+- Port par défaut : `3000`
+- Base de données : `mongodb://localhost:27017/slack`
+- Variables d'environnement (optionnelles) :
+  ```bash
+  cd backend
+  cp .env.example .env    # Configurez selon vos besoins
+  ```
+  Valeurs par défaut :
+  - PORT=3000
+  - DATABASE_URL=mongodb://localhost:27017/slack
+  - JWT_SECRET=dev-secret-key
+  - JWT_EXPIRES_IN=24h
+
+### Frontend
+- Port par défaut : `5173`
+- Configuration du Backend : `src/config/api.ts`
+  - `BASE_URL` par défaut : `http://localhost:3000`
+
+### Installation MongoDB
+Si MongoDB n'est pas installé sur votre machine, suivez les instructions dans le dossier [database/](database/README.md).
+Vous pouvez utiliser Docker ou une installation locale.
+
+## 📁 Structure du Projet
 
 ```
 slack/
@@ -16,49 +62,3 @@ slack/
 ├── frontend/   # Application React
 └── database/   # Configuration MongoDB
 ```
-
-## Installation
-
-1. **Base de données**
-   - Si MongoDB est déjà installé sur votre machine, vous pouvez passer cette étape
-   - Sinon, suivez les instructions dans le dossier [database/](database/README.md) pour installer MongoDB
-   - Vous pouvez utiliser Docker (recommandé) ou une installation locale
-
-2. **Backend**
-   ```bash
-   cd backend
-   npm install
-   cp .env.example .env    # Optionnel : configurez vos variables d'environnement
-   npm run start
-   ```
-   Le serveur démarrera sur `http://localhost:3000`
-
-   **Note sur la configuration :**
-   - Le fichier `.env` est optionnel
-   - Sans `.env`, l'application utilisera les valeurs par défaut :
-     - PORT=3000
-     - DATABASE_URL=mongodb://localhost:27017/slack
-     - JWT_SECRET=dev-secret-key
-     - JWT_EXPIRES_IN=24h
-
-3. **Frontend**
-   ```bash
-   cd frontend
-   npm install
-   npm run dev
-   ```
-   L'application sera accessible sur `http://localhost:5173`
-
-   **Configuration du Backend :**
-   - L'URL du backend peut être configurée dans `src/config/api.ts`
-   - Par défaut, elle pointe vers `http://localhost:3000`
-   - Modifiez `BASE_URL` si votre backend est hébergé sur une autre URL
-
-## Développement
-
-- Backend : `npm run start:dev` pour le mode watch
-- Frontend : `npm run dev` inclut le hot-reload
-
-## Licence
-
-MIT

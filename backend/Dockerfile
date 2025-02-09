@@ -1,30 +1,30 @@
-# Stage 1: Build the NestJS application
+# Étape 1 : Construction de l'application NestJS
 FROM node:18-alpine AS build
 
-# Set working directory
+# Définition du répertoire de travail
 WORKDIR /usr/src/app
 
-# Install dependencies
+# Installation des dépendances
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the application code
+# Copie du reste du code source
 COPY . .
 
-# Build the NestJS application
+# Construction de l'application NestJS
 RUN npm run build
 
-# Stage 2: Create the production image
+# Étape 2 : Création de l'image de production
 FROM node:18-alpine
 
-# Set working directory
+# Définition du répertoire de travail
 WORKDIR /usr/src/app
 
-# Copy dependencies from the build stage
+# Copie des dépendances depuis l'étape de construction
 COPY --from=build /usr/src/app/node_modules ./node_modules
 
-# Copy built application code from the build stage
+# Copie du code compilé depuis l'étape de construction
 COPY --from=build /usr/src/app/dist ./dist
 
-# Define the command to run the application
+# Définition de la commande de démarrage de l'application
 CMD ["node", "dist/main"]

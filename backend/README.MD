@@ -34,16 +34,13 @@ npm run start:dev
 
 ### Docker
 ```bash
-# Modifier mongo url dans docker-compose.yml
-DATABASE_URL=mongodb://localhost:27017/slack
+# Modifier mongo url dans docker-compose.yml, l'ip devrait etre l'adresse ip de la machine ou d'un serveur distant par example 192.168.1.100
+DATABASE_URL=mongodb://192.168.1.100:27017/slack
 
-# Construction de l'image
-docker build -t slack-backend .
-
-# Lancement avec docker-compose (inclut MongoDB et Redis)
-docker-compose up -d
-
+# Construction et lancement du conteneur (reconstruction si nécessaire)
+docker-compose up --build -d --remove-orphans --force-recreate
 ```
+Une fois lancée, le serveur est accessible à l'adresse : http://localhost:3000
 
 ## 🏗️ Architecture du projet
 

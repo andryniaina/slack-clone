@@ -2,7 +2,7 @@
 
 Ce document décrit les différentes options pour configurer MongoDB pour le projet Slack Clone.
 
-## Option 1 : Utilisation de Docker (Recommandé)
+## Option 1 : Utilisation de Docker
 
 ### Prérequis
 - [Docker](https://www.docker.com/get-started)
