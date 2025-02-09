@@ -50,6 +50,11 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
       const updatedUser = await this.userService.findById(user._id);
       if (updatedUser?.socketIds.length === 0) {
         await this.userService.updateOnlineStatus(user._id, false);
+        // Émettre le changement de statut à tous les utilisateurs
+        this.server.emit('connectionStatusChanged', {
+          userId: user._id,
+          isOnline: false
+        });
       }
     }
   }
@@ -70,6 +75,12 @@ export class MessageGateway implements OnGatewayConnection, OnGatewayDisconnect 
       // Ajouter le socketId à l'utilisateur
       await this.userService.addSocketId(user._id, client.id);
       await this.userService.updateOnlineStatus(user._id, true);
+
+      // Émettre le changement de statut à tous les utilisateurs
+      this.server.emit('connectionStatusChanged', {
+        userId: user._id,
+        isOnline: true
+      });
 
       // Rejoindre tous les canaux de l'utilisateur
       const channels = await this.channelService.findUserChannels(user._id);

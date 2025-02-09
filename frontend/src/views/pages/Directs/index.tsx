@@ -29,6 +29,11 @@ import { ChannelType } from '../../../data/dtos/channel';
 import { Message } from '../../../components/Message';
 import { useChannelMessages, useSendMessage, useTypingStatus } from '../../../hooks/message';
 import { Message as MessageType } from '../../../data/dtos/message';
+import { useLastMessages } from '../../../hooks/message/useLastMessages';
+import { useQueryClient } from '@tanstack/react-query';
+import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
+import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
+import { sortUsersWithCurrentUserLast } from '../../../utils/user';
 
 export default function Directs() {
   const { user: currentUser } = useAuth();
@@ -42,6 +47,7 @@ export default function Directs() {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const { setTyping } = useTypingStatus(selectedChannel?._id || '');
+  const { data: lastMessages } = useLastMessages(channels);
 
   useEffect(() => {
     const initializeChannels = async () => {
@@ -62,15 +68,8 @@ export default function Directs() {
     initializeChannels();
   }, [users]);
 
-  // Trier les utilisateurs
-  const sortedUsers = users
-    ?.sort((a, b) => {
-      // Trier d'abord par statut en ligne
-      if (a.isOnline && !b.isOnline) return -1;
-      if (!a.isOnline && b.isOnline) return 1;
-      // Puis par nom d'utilisateur
-      return (a.username || a.email).localeCompare(b.username || b.email);
-    }) ?? [];
+  // Trier les utilisateurs avec l'utilisateur courant en dernier
+  const sortedUsers = sortUsersWithCurrentUserLast(users, currentUser?._id);
 
   // Trouver le canal correspondant à l'utilisateur sélectionné
   const findChannelForUser = (user: User) => {
@@ -206,39 +205,48 @@ export default function Directs() {
     }
   };
 
+  const handleAddColleagues = () => {
+    // TODO: Implémenter l'ajout de collègues
+    console.log('Ajouter des collègues');
+  };
+
   return (
     <div className="flex h-full bg-[#3E0F3F]">
       {/* Left Sidebar */}
       <div className="w-[260px] bg-[#512654] flex flex-col flex-shrink-0 rounded-lg">
         {/* Sections */}
         <div className="flex-1 overflow-y-auto px-2 py-3 space-y-4">
-          {/* Direct Messages */}
-          <div>
-            <div className="flex items-center justify-between px-2 py-1 text-white/70 hover:text-white cursor-pointer">
-              <div className="flex items-center">
-                <ChevronDown size={16} className="mr-1" />
-                <span className="text-sm font-medium">Messages directs</span>
+          {/* Messages directs Section */}
+          <SidebarSection title="Messages directs">
+            {usersLoading ? (
+              <div className="flex items-center justify-center py-4 text-white/70">
+                <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                <span className="text-sm">Chargement...</span>
               </div>
-            </div>
-            <div className="mt-1 space-y-0.5">
-              {usersLoading || isChannelsLoading ? (
-                <div className="flex items-center justify-center py-4 text-white/70">
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  <span className="text-sm">Chargement...</span>
-                </div>
-              ) : users?.length === 0 ? (
-                <div className="px-2 py-4 text-white/70 text-sm text-center">
-                  Aucun utilisateur disponible
-                </div>
-              ) : (
-                sortedUsers.map(renderUserItem)
-              )}
-              <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                <Plus size={16} className="mr-2" />
-                Ajouter des collègues
-              </button>
-            </div>
-          </div>
+            ) : !sortedUsers?.length ? (
+              <div className="px-2 py-4 text-white/70 text-sm text-center">
+                Aucun utilisateur disponible
+              </div>
+            ) : (
+              <>
+                {sortedUsers.map((user) => (
+                  <SidebarUserItem
+                    key={user._id}
+                    user={user}
+                    isSelected={selectedUser?._id === user._id}
+                    onClick={() => handleUserSelect(user)}
+                  />
+                ))}
+                <button
+                  onClick={handleAddColleagues}
+                  className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1.5 text-sm flex items-center rounded"
+                >
+                  <Plus size={16} className="mr-2" />
+                  Ajouter des collègues
+                </button>
+              </>
+            )}
+          </SidebarSection>
         </div>
       </div>
 
@@ -263,7 +271,10 @@ export default function Directs() {
                   <MoreVertical className="w-5 h-5" />
                 </button>
                 <button 
-                  onClick={() => setSelectedUser(null)}
+                  onClick={() => {
+                    setSelectedChannel(null);
+                    setSelectedUser(null);
+                  }}
                   className="text-gray-600 hover:text-gray-800"
                 >
                   <X className="w-5 h-5" />

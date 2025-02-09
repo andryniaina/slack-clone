@@ -57,8 +57,12 @@ export class UserService {
    * @returns Liste des utilisateurs avec leurs informations de base
    */
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    console.log("findAll");
+    const users = await this.userModel.find().exec();
+    console.log("users", users);
+    return users;
   }
+
 
   async addSocketId(userId: Types.ObjectId, socketId: string): Promise<User> {
     const user = await this.userModel.findByIdAndUpdate(

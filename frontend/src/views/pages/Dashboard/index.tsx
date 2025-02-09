@@ -24,6 +24,9 @@ import {
   import { useAccessibleChannels } from '../../../hooks/channel';
   import { useQueryClient } from '@tanstack/react-query';
   import { CreateChannelModal } from '../../../components/views/CreateChannelModal';
+  import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
+  import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
+  import { sortUsersWithCurrentUserLast } from '../../../utils/user';
   
   export default function Directs() {
     const { user: currentUser } = useAuth();
@@ -63,15 +66,8 @@ import {
       };
     }, [isTyping, setTyping]);
   
-    // Trier les utilisateurs
-    const sortedUsers = users
-      ?.sort((a, b) => {
-        // Trier d'abord par statut en ligne
-        if (a.isOnline && !b.isOnline) return -1;
-        if (!a.isOnline && b.isOnline) return 1;
-        // Puis par nom d'utilisateur
-        return (a.username || a.email).localeCompare(b.username || b.email);
-      }) ?? [];
+    // Trier les utilisateurs avec l'utilisateur courant en dernier
+    const sortedUsers = sortUsersWithCurrentUserLast(users, currentUser?._id);
   
     // Trouver le canal correspondant à l'utilisateur sélectionné
     const findChannelForUser = (user: User) => {
@@ -268,33 +264,40 @@ import {
               </div>
             </div>
 
-            {/* Direct Messages */}
-            <div>
-              <div className="flex items-center justify-between px-2 py-1 text-white/70 hover:text-white cursor-pointer">
-                <div className="flex items-center">
-                  <ChevronDown size={16} className="mr-1" />
-                  <span className="text-sm font-medium">Messages directs</span>
+            {/* Messages directs Section */}
+            <SidebarSection title="Messages directs">
+              {usersLoading ? (
+                <div className="flex items-center justify-center py-4 text-white/70">
+                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                  <span className="text-sm">Chargement...</span>
                 </div>
-              </div>
-              <div className="mt-1 space-y-0.5">
-                {usersLoading || isChannelsLoading ? (
-                  <div className="flex items-center justify-center py-4 text-white/70">
-                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    <span className="text-sm">Chargement...</span>
-                  </div>
-                ) : users?.length === 0 ? (
-                  <div className="px-2 py-4 text-white/70 text-sm text-center">
-                    Aucun utilisateur disponible
-                  </div>
-                ) : (
-                  sortedUsers.map(renderUserItem)
-                )}
-                <button className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1 text-sm flex items-center rounded">
-                  <Plus size={16} className="mr-2" />
-                  Ajouter des collègues
-                </button>
-              </div>
-            </div>
+              ) : !sortedUsers?.length ? (
+                <div className="px-2 py-4 text-white/70 text-sm text-center">
+                  Aucun utilisateur disponible
+                </div>
+              ) : (
+                <>
+                  {sortedUsers.map((user) => (
+                    <SidebarUserItem
+                      key={user._id}
+                      user={user}
+                      isSelected={selectedUser?._id === user._id}
+                      onClick={() => handleUserClick(user)}
+                    />
+                  ))}
+                  <button
+                    onClick={() => {
+                      setSelectedUser(null);
+                      setSelectedChannel(null);
+                    }}
+                    className="w-full text-white/70 hover:bg-[#350D36] px-2 py-1.5 text-sm flex items-center rounded"
+                  >
+                    <Plus size={16} className="mr-2" />
+                    Ajouter des collègues
+                  </button>
+                </>
+              )}
+            </SidebarSection>
           </div>
         </div>
   

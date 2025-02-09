@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './AuthContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface WebSocketContextType {
   socket: Socket | null;
@@ -15,6 +16,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
   const socketRef = useRef<Socket | null>(null);
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 5;
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     let reconnectTimer: ReturnType<typeof setTimeout>;
@@ -75,6 +77,13 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
           console.error('Erreur WebSocket:', error);
         });
 
+        // Écouter les changements de statut de connexion
+        socket.on('connectionStatusChanged', ({ userId, isOnline }) => {
+          console.log('Connection status changed:', { userId, isOnline });
+          // Invalider la requête des utilisateurs pour forcer une mise à jour
+          queryClient.invalidateQueries({ queryKey: ['users'] });
+        });
+
         socketRef.current = socket;
       } catch (error) {
         console.error('Error creating socket:', error);
@@ -105,12 +114,13 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
         clearTimeout(reconnectTimer);
       }
       if (socketRef.current) {
+        socketRef.current.off('connectionStatusChanged');
         socketRef.current.disconnect();
         socketRef.current = null;
         setIsConnected(false);
       }
     };
-  }, [user]);
+  }, [user, queryClient]);
 
   return (
     <WebSocketContext.Provider value={{ socket: socketRef.current, isConnected }}>
