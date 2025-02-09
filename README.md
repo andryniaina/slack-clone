@@ -137,7 +137,7 @@ Les canaux permettent des discussions de groupe en temps réel :
 - **Messages instantanés** : Les messages apparaissent immédiatement pour tous les membres connectés
 - **Indicateurs de présence** : 
   - Statut en ligne/hors ligne mis à jour en temps réel
-  - Nombre de membres actifs affiché en haut du canal
+  - Nombre de membres affiché en haut du canal
   - Liste des membres mise à jour automatiquement
 
 **Interface du canal :**
