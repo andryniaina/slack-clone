@@ -43,23 +43,23 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
         // Gestionnaires d'événements de connexion
         socket.on('connect', () => {
-          console.log('Socket connected, sending user ID...');
+          console.log('Socket connecté, envoi de l\'ID utilisateur...');
           reconnectAttempts.current = 0;
           socket.emit('connect_user', user._id);
         });
 
         socket.on('connect_error', (error) => {
-          console.error('Connection error:', error);
+          console.error('Erreur de connexion:', error);
           handleReconnect();
         });
 
         socket.on('connect_timeout', () => {
-          console.error('Connection timeout');
+          console.error('Délai de connexion dépassé');
           handleReconnect();
         });
 
         socket.on('connect_confirmed', () => {
-          console.log('User connection confirmed');
+          console.log('Connexion utilisateur confirmée');
           setIsConnected(true);
         });
 
@@ -79,7 +79,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
         // Écouter les changements de statut de connexion
         socket.on('connectionStatusChanged', ({ userId, isOnline }) => {
-          console.log('Connection status changed:', { userId, isOnline });
+          console.log('Statut de connexion modifié:', { userId, isOnline });
           // Invalider la requête des utilisateurs pour forcer une mise à jour
           queryClient.invalidateQueries({ queryKey: ['users'] });
         });
@@ -93,7 +93,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
     const handleReconnect = () => {
       if (reconnectAttempts.current >= maxReconnectAttempts) {
-        console.error('Max reconnection attempts reached');
+        console.error('Nombre maximal de tentatives de reconnexion atteint');
         return;
       }
 
@@ -103,7 +103,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
       // Attendre avant de tenter une reconnexion
       reconnectTimer = setTimeout(() => {
         connectSocket();
-      }, 1000 * Math.min(reconnectAttempts.current, 5)); // Backoff exponentiel plafonné à 5 secondes
+      }, 1000 * Math.min(reconnectAttempts.current, 5)); // Délai exponentiel plafonné à 5 secondes
     };
 
     connectSocket();

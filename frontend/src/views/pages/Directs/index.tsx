@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ChatContainer } from '../../../components/Chat/ChatContainer';
 import { SidebarUserItem } from '../../../components/views/Dashboard/SidebarUserItem';
 import { useChat, useDirectMessages } from '../../../hooks/chat';
@@ -6,7 +5,6 @@ import { X, MoreVertical } from 'lucide-react';
 import { SidebarSection } from '../../../components/views/Dashboard/SidebarSection';
 import { useCollapsibleState } from '../../../hooks/ui/useCollapsibleState';
 import { User } from '../../../data/dtos/user';
-import { Channel } from '../../../data/dtos/channel';
 
 export default function Directs() {
   // État des sections réductibles

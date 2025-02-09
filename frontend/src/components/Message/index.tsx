@@ -1,52 +1,49 @@
 import { Message as MessageType } from '../../data/dtos/message';
-import { format } from 'date-fns';
 import avatar from '../../assets/images/avatar.png';
 import clsx from 'clsx';
+import { formatTime } from '../../utils/date';
 
 interface MessageProps {
   message: MessageType;
   isFirstInGroup?: boolean;
+  isFirstOfDay?: boolean;
 }
 
-export function Message({ message, isFirstInGroup = true }: MessageProps) {
-  const formattedTime = format(new Date(message.createdAt), 'HH:mm');
-  const formattedDate = format(new Date(message.createdAt), 'dd MMMM yyyy');
+export function Message({ message, isFirstInGroup = true, isFirstOfDay = false }: MessageProps) {
+  const date = new Date(message.createdAt);
+  const formattedTime = formatTime(date);
 
   return (
     <div className={clsx(
-      "px-6 py-1 hover:bg-gray-50 group",
-      isFirstInGroup && "mt-3"
+      "px-[20px] hover:bg-[#F8F8F8] group transition-colors duration-100",
+      isFirstInGroup ? "mt-[10px]" : "mt-0",
+      isFirstOfDay && "mt-0"
     )}>
-      {isFirstInGroup && (
-        <div className="text-xs text-gray-500 mb-1">
-          {formattedDate}
-        </div>
-      )}
-      <div className="flex items-start">
-        {isFirstInGroup ? (
-          <img
-            src={message.sender.avatar || avatar}
-            alt={message.sender.username || message.sender.email}
-            className="w-9 h-9 rounded mr-2 mt-0.5"
-          />
-        ) : (
-          <div className="w-9 mr-2" />
-        )}
-        <div className="flex-1 min-w-0">
+      <div className="flex items-start group min-h-[20px] -ml-[3px]">
+        <div className="w-[36px] flex-shrink-0 mt-[1px]">
           {isFirstInGroup && (
-            <div className="flex items-center mb-1">
-              <span className="font-bold text-gray-900">
+            <img
+              src={message.sender.avatar || avatar}
+              alt={message.sender.username || message.sender.email}
+              className="w-[36px] h-[36px] rounded-[4px] object-cover"
+            />
+          )}
+        </div>
+        <div className="flex-1 min-w-0 pl-[10px] -mt-[1px]">
+          {isFirstInGroup && (
+            <div className="flex items-baseline mb-[1px] select-none">
+              <span className="font-bold text-[15px] text-[#1D1C1D] leading-[1.46668] hover:underline cursor-pointer">
                 {message.sender.username || message.sender.email}
               </span>
-              <span className="ml-2 text-xs text-gray-500">
+              <span className="text-[12px] text-[#616061] font-normal ml-[8px] leading-[1.46668] select-none">
                 {formattedTime}
               </span>
             </div>
           )}
-          <div className="text-gray-900 whitespace-pre-wrap break-words">
+          <div className="text-[15px] text-[#1D1C1D] leading-[1.46668] break-words whitespace-pre-wrap">
             {message.content}
             {message.isEdited && (
-              <span className="text-xs text-gray-500 ml-1">(modifié)</span>
+              <span className="text-[12px] text-[#616061] ml-[6px] font-normal select-none">(modifié)</span>
             )}
           </div>
         </div>

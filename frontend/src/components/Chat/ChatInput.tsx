@@ -9,7 +9,7 @@ interface ChatInputProps {
 export function ChatInput({ onSendMessage, onTyping }: ChatInputProps) {
   const [message, setMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const typingTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     return () => {
@@ -52,7 +52,7 @@ export function ChatInput({ onSendMessage, onTyping }: ChatInputProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border-t border-gray-200">
+    <form onSubmit={handleSubmit} className="p-4 my-2 ml-2">
       <div className="flex items-center gap-2">
         <input
           type="text"

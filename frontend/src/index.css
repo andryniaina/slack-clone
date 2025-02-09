@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Force light mode */
+/* Forcer le mode clair */
 :root {
   color-scheme: light;
 }
 
-/* Prevent dark mode */
+/* Empêcher le mode sombre */
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: light;
