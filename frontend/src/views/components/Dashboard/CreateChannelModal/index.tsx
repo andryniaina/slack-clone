@@ -33,11 +33,16 @@ export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps)
 
   const handleSubmit = async () => {
     try {
+      // Pour les canaux privés, ajouter automatiquement l'utilisateur connecté aux membres
+      const members = type === ChannelType.PRIVATE 
+        ? [currentUser?._id, ...selectedMembers].filter(Boolean) as string[]
+        : selectedMembers;
+
       await ChannelService.createChannel({
         name,
         description,
         type,
-        members: selectedMembers,
+        members,
       });
 
       // Rejoindre le nouveau canal via WebSocket
@@ -46,7 +51,6 @@ export function CreateChannelModal({ isOpen, onClose }: CreateChannelModalProps)
       }
 
       // Invalider la requête des canaux accessibles
-
       queryClient.invalidateQueries({ 
         queryKey: ['channels', 'accessible'] 
       });
