@@ -9,6 +9,7 @@ interface AuthContextType {
   loading: boolean;
   login: (token: string) => Promise<void>;
   logout: () => Promise<void>;
+  refetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,8 +54,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refetchUser = async () => {
+    try {
+      const currentUser = await UserService.getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      console.error('Error refetching user:', error);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, refetchUser }}>
       {children}
     </AuthContext.Provider>
   );

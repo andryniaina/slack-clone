@@ -6,6 +6,7 @@ import { PasswordToggleButton } from '../Auth/PasswordToggleButton';
 import { UserService } from '../../../services/user';
 import { useQueryClient } from '@tanstack/react-query';
 import { USERS_QUERY_KEY } from '../../../hooks/user';
+import { useAuth } from '../../../contexts/AuthContext';
 import clsx from 'clsx';
 
 interface EditProfileModalProps {
@@ -18,6 +19,7 @@ type TabType = 'profile' | 'security';
 
 export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProps) {
   const queryClient = useQueryClient();
+  const { refetchUser } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [username, setUsername] = useState(user?.username || '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -91,6 +93,9 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
         // Mettre à jour le cache
         queryClient.setQueryData(['auth', 'user'], updatedUser);
         queryClient.invalidateQueries({ queryKey: USERS_QUERY_KEY });
+        
+        // Mettre à jour le contexte d'authentification
+        await refetchUser();
         
         onClose();
       } else if (activeTab === 'security') {
