@@ -92,33 +92,7 @@ Connectez-vous avec :
 - **Email** : L'adresse email utilisée lors de l'inscription
 - **Mot de passe** : Votre mot de passe
 
-### 3. Recherche et Navigation Rapide
-![Barre de recherche](docs/screenshots/Search.png)
-
-La barre de recherche en haut de l'application permet une navigation rapide et efficace :
-
-**Fonctionnalités :**
-- **Recherche universelle :**
-  - Recherche simultanée dans les canaux et les utilisateurs
-  - Résultats en temps réel pendant la saisie
-  - Affichage distinctif des canaux (préfixe #) et des utilisateurs (avec avatar)
-
-**Résultats de recherche :**
-- **Canaux :**
-  - Affichés avec l'icône #
-  - Nom du canal en évidence
-  - Redirection directe vers le canal au clic
-- **Utilisateurs :**
-  - Avatar de l'utilisateur
-  - Nom d'utilisateur et email
-  - Redirection vers la conversation privée au clic
-
-**Navigation intelligente :**
-- Cliquer sur un résultat ouvre immédiatement le chat correspondant
-- Transition fluide vers la conversation sélectionnée
-- Conservation du contexte de navigation
-
-### 4. Dashboard
+### 3. Dashboard
 ![Page principale](docs/screenshots/CanalChat.png)
 
 Une fois connecté, vous accédez au dashboard qui comprend :
@@ -145,7 +119,7 @@ Une fois connecté, vous accédez au dashboard qui comprend :
 - Zone de saisie en bas pour envoyer des messages
 - Description du canal en haut (ex: "Canal général pour toute l'entreprise")
 
-### 5. Création d'un Canal
+### 4. Création d'un Canal
 ![Création de canal](docs/screenshots/CreateCanal.png)
 
 Pour créer un nouveau canal, cliquez sur le bouton "+" dans la section CANAUX. Le formulaire de création comprend :
@@ -162,7 +136,7 @@ Pour créer un nouveau canal, cliquez sur le bouton "+" dans la section CANAUX. 
 
 > Note : Le canal "#tous" est public par défaut et ne peut pas être rendu privé car il sert de canal général pour l'entreprise.
 
-### 6. Communication dans les Canaux
+### 5. Communication dans les Canaux
 ![Canal de discussion](docs/screenshots/CanalChat.png)
 
 Les canaux permettent des discussions de groupe en temps réel :
@@ -188,7 +162,7 @@ Les canaux permettent des discussions de groupe en temps réel :
 
 > Note : Toutes les interactions (nouveaux messages, changements de statut, etc.) sont synchronisées instantanément entre tous les membres du canal grâce à WebSocket.
 
-### 7. Messages Directs
+### 6. Messages Directs
 ![Messages directs](docs/screenshots/DirectMessage.png)
 
 Les messages directs permettent des conversations privées entre utilisateurs :
@@ -202,7 +176,7 @@ Les messages directs permettent des conversations privées entre utilisateurs :
   - Messages affichés avec l'avatar et le nom de l'expéditeur
   - Indication de la date des messages (ex: "Dimanche 9 Février")
 
-### 8. Gestion du Profil
+### 7. Gestion du Profil
 ![Édition du profil](docs/screenshots/EditProfile.png)
 
 L'application permet de gérer votre profil utilisateur via une interface intuitive :
@@ -220,3 +194,29 @@ L'application permet de gérer votre profil utilisateur via une interface intuit
 **Actions :**
 - Bouton "Annuler" pour fermer sans sauvegarder
 - Bouton "Enregistrer les modifications" pour valider les changements
+
+### 8. Recherche et Navigation Rapide
+![Barre de recherche](docs/screenshots/Search.png)
+
+La barre de recherche en haut de l'application permet une navigation rapide et efficace :
+
+**Fonctionnalités :**
+- **Recherche universelle :**
+  - Recherche simultanée dans les canaux et les utilisateurs
+  - Résultats en temps réel pendant la saisie
+  - Affichage distinctif des canaux (préfixe #) et des utilisateurs (avec avatar)
+
+**Résultats de recherche :**
+- **Canaux :**
+  - Affichés avec l'icône #
+  - Nom du canal en évidence
+  - Redirection directe vers le canal au clic
+- **Utilisateurs :**
+  - Avatar de l'utilisateur
+  - Nom d'utilisateur et email
+  - Redirection vers la conversation privée au clic
+
+**Navigation intelligente :**
+- Cliquer sur un résultat ouvre immédiatement le chat correspondant
+- Transition fluide vers la conversation sélectionnée
+- Conservation du contexte de navigation
