@@ -16,7 +16,7 @@ export function ChatHeader({ channel, rightContent, selectedUser }: ChatHeaderPr
   const isDirectChannel = channel.type === 'direct';
   const { data: users = [] } = useUsers();
 
-  // Get the latest user data from the users list
+  // Récupérer les données de l'utilisateur actuel
   const currentUser = selectedUser ? users.find(u => u._id === selectedUser._id) : null;
   const userToDisplay = currentUser || selectedUser;
 

@@ -20,12 +20,12 @@ export const SearchService = {
 
     const searchQuery = query.toLowerCase();
 
-    // Filter and format channels
+    // Filtrer et formater les canaux
     const channelResults = channels
       .filter(channel => channel.name.toLowerCase().includes(searchQuery))
       .map(channel => ({ type: 'channel' as const, item: channel }));
 
-    // Filter and format users
+    // Filtrer et formater les utilisateurs
     const userResults = users
       .filter(user => 
         (user.username?.toLowerCase().includes(searchQuery) || 
@@ -33,7 +33,7 @@ export const SearchService = {
       )
       .map(user => ({ type: 'user' as const, item: user }));
 
-    // Combine and limit results
+    // Combiner et limiter les résultats
     return [...channelResults, ...userResults].slice(0, 5);
   }
 };

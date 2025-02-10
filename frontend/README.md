@@ -10,14 +10,15 @@ Application de messagerie d'entreprise construite avec des technologies modernes
 
 ### Installation et développement
 ```bash
-# Installation des dépendances avec une gestion stricte des versions
-npm ci
+# Installation des dépendances
+npm install
 
 # Lancement en mode développement avec HMR
 npm run dev
 ```
 
 Une fois lancée, l'application est accessible à l'adresse : http://localhost:5073
+
 
 ## 🏗️ Architecture du projet
 
