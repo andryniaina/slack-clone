@@ -24,7 +24,7 @@ Une application de messagerie en temps réel inspirée de Slack, construite avec
    ```bash
    cd backend
    npm install
-   npm run start     # Lance le serveur sur http://localhost:3000
+   npm run start     # Un log affichant le port et l'url du serveur sera affiché dans la console quand le serveur sera lancé
    ```
 
 2. **Frontend**
@@ -34,7 +34,7 @@ Une application de messagerie en temps réel inspirée de Slack, construite avec
    npm run dev          # Lance l'application sur http://localhost:5173
    ```
 
-Ces commandes utiliseront les configurations par défaut :
+Ces commandes utilisent les configurations par défaut :
 - Backend : `http://localhost:3000` avec MongoDB sur `mongodb://localhost:27017/slack`
 - Frontend : `http://localhost:5173` connecté au backend par défaut
 
@@ -46,7 +46,7 @@ Ces commandes utiliseront les configurations par défaut :
 - Variables d'environnement (optionnelles) :
   ```bash
   cd backend
-  cp .env.example .env    # Configurez selon vos besoins
+  cp .env.example .env    # À configurer selon les besoins
   ```
   Valeurs par défaut :
   - PORT=3000
@@ -60,8 +60,8 @@ Ces commandes utiliseront les configurations par défaut :
   - `BASE_URL` par défaut : `http://localhost:3000`
 
 ### Installation MongoDB
-Si MongoDB n'est pas installé sur votre machine, suivez les instructions dans le dossier [database/](database/README.md).
-Vous pouvez utiliser Docker ou une installation locale.
+Si MongoDB n'est pas installé sur la machine, les instructions sont disponibles dans le dossier [database/](database/README.md).
+Il est possible d'utiliser Docker ou une installation locale.
 
 ## 📁 Structure du Projet
 
@@ -69,33 +69,34 @@ Vous pouvez utiliser Docker ou une installation locale.
 slack/
 ├── backend/    # API NestJS
 ├── frontend/   # Application React
-└── database/   # Configuration MongoDB
-└── docs/       # Fichiers nécessaires pour la documentation
+├── database/   # Configuration MongoDB
+├── docs/       # Fichiers nécessaires pour la documentation
 ```
+
 
 ## 📱 Utilisation de l'application
 
 ### 1. Création de compte
 ![Page d'inscription](docs/screenshots/Register.png)
 
-Pour créer un compte, remplissez le formulaire d'inscription avec :
-- **Nom d'utilisateur** : Votre pseudo qui sera visible par les autres utilisateurs
+Pour créer un compte, il suffit de remplir le formulaire d'inscription avec :
+- **Nom d'utilisateur** : Le pseudo qui sera visible par les autres utilisateurs
 - **Email** : Une adresse email valide (pas de vérification requise)
 - **Mot de passe** : Minimum 6 caractères
 
-> Note : Pour simplifier le développement, nous n'avons pas implémenté de vérification d'email afin d'éviter la configuration d'un serveur SMTP.
+> Note : Pour simplifier le développement, la vérification d'email n'a pas été implémentée pour éviter la configuration d'un serveur SMTP.
 
 ### 2. Connexion
 ![Page de connexion](docs/screenshots/Login.png)
 
-Connectez-vous avec :
+La connexion se fait avec :
 - **Email** : L'adresse email utilisée lors de l'inscription
-- **Mot de passe** : Votre mot de passe
+- **Mot de passe** : Le mot de passe choisi
 
 ### 3. Dashboard
 ![Page principale](docs/screenshots/CanalChat.png)
 
-Une fois connecté, vous accédez au dashboard qui comprend :
+Une fois connecté, le dashboard comprend :
 
 **Navigation principale :**
 - **Barre de recherche** : En haut, permet de rechercher des utilisateurs ou des canaux
@@ -105,7 +106,7 @@ Une fois connecté, vous accédez au dashboard qui comprend :
 **Barre latérale :**
 - **Section CANAUX :**
   - Liste des canaux avec préfixe "#" (ex: #tous, #social)
-  - Bouton Rafraichir pour rafraichir la liste des canaux
+  - Bouton Rafraichir pour mettre à jour la liste des canaux
   - Indicateur du nombre de membres par canal
   - Canal "#tous" par défaut pour toute l'entreprise
 
@@ -122,16 +123,16 @@ Une fois connecté, vous accédez au dashboard qui comprend :
 ### 4. Création d'un Canal
 ![Création de canal](docs/screenshots/CreateCanal.png)
 
-Pour créer un nouveau canal, cliquez sur le bouton "+" dans la section CANAUX. Le formulaire de création comprend :
+Pour créer un nouveau canal, il faut cliquer sur le bouton "+" dans la section CANAUX. Le formulaire de création comprend :
 
 **Informations requises :**
-- **Nom du canal** : Préfixé automatiquement par "#", choisissez un nom simple et clair
-- **Description** (facultatif) : Donnez aux membres une idée claire de l'objectif du canal
+- **Nom du canal** : Préfixé automatiquement par "#", choisir un nom simple et clair
+- **Description** (facultatif) : Donne aux membres une idée claire de l'objectif du canal
 
 **Options de visibilité :**
 - **Public** : Accessible à tous les utilisateurs de l'entreprise
 - **Privé** : Uniquement sur invitation
-  - Si vous choisissez "Privé", vous devrez sélectionner les membres autorisés à rejoindre le canal
+  - Pour un canal privé, il faut sélectionner les membres autorisés à le rejoindre
   - Les canaux privés ne peuvent être rejoints ou consultés que sur invitation
 
 > Note : Le canal "#tous" est public par défaut et ne peut pas être rendu privé car il sert de canal général pour l'entreprise.
@@ -169,7 +170,7 @@ Les messages directs permettent des conversations privées entre utilisateurs :
 
 **Fonctionnalités :**
 - **Statut en ligne** : Indicateur vert "En ligne" quand l'utilisateur est connecté
-- **Messages en temps réel** : Les messages apparaissent instantanément grâce à WebSocket, sans besoin de rafraîchir
+- **Messages en temps réel** : Les messages apparaissent instantanément grâce à WebSocket
 - **Historique des messages** : Affichage chronologique avec horodatage (format 23:51)
 - **Interface de chat** :
   - Zone de saisie en bas avec envoi par la touche Entrée ou le bouton d'envoi
@@ -179,16 +180,16 @@ Les messages directs permettent des conversations privées entre utilisateurs :
 ### 7. Gestion du Profil
 ![Édition du profil](docs/screenshots/EditProfile.png)
 
-L'application permet de gérer votre profil utilisateur via une interface intuitive :
+L'application permet de gérer son profil utilisateur via une interface intuitive :
 
 **Onglets de configuration :**
 - **Profil** : Modification de l'username
 - **Sécurité** : Gestion du mot de passe
 
 **Modification du mot de passe :**
-- Saisissez votre mot de passe actuel
-- Entrez votre nouveau mot de passe
-- Confirmez le nouveau mot de passe
+- Saisir le mot de passe actuel
+- Entrer le nouveau mot de passe
+- Confirmer le nouveau mot de passe
 - Les champs sont masqués par défaut mais peuvent être affichés via l'icône "œil"
 
 **Actions :**
@@ -217,6 +218,6 @@ La barre de recherche en haut de l'application permet une navigation rapide et e
   - Redirection vers la conversation privée au clic
 
 **Navigation intelligente :**
-- Cliquer sur un résultat ouvre immédiatement le chat correspondant
+- Un clic sur un résultat ouvre immédiatement le chat correspondant
 - Transition fluide vers la conversation sélectionnée
 - Conservation du contexte de navigation
