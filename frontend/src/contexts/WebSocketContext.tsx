@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState, ReactNode } fro
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './AuthContext';
 import { useQueryClient } from '@tanstack/react-query';
+import { API_CONFIG } from '../config/api';
 
 interface WebSocketContextType {
   socket: Socket | null;
@@ -32,7 +33,7 @@ export function WebSocketProvider({ children }: { children: ReactNode }) {
 
       try {
         // Créer une connexion Socket.IO avec des options de reconnexion
-        const socket = io('http://localhost:3000', {
+        const socket = io(API_CONFIG.BASE_URL, {
           withCredentials: true,
           transports: ['websocket'],
           reconnection: true,
