@@ -1,6 +1,7 @@
 # Slack Clone
 
 Une application de messagerie en temps réel inspirée de Slack, construite avec React (Vite), Node.js (NestJS) et MongoDB.
+Développée par RAHERISON Andriniana.
 
 ## 🚀 Démarrage rapide
 
